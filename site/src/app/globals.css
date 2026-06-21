@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+:root {
+  /* ──── Palette marocaine ──── */
+  --color-bleu-majorelle: #1B7A8F;
+  --color-bleu-turquoise: #2BA5BD;
+  --color-bleu-chefchaouen: #7DB5C7;
+  --color-bleu-nuit: #0B1929;
+  --color-bleu-cosmique: #1A2847;
+
+  --color-or-doux: #C9A961;
+  --color-or-clair: #E8C77A;
+  --color-cuivre: #B87333;
+
+  --color-terre-cuite: #C57B5C;
+  --color-sable: #E8D5B7;
+  --color-pierre: #D9C8A8;
+
+  --color-ivoire: #F7F3EC;
+  --color-ivoire-fonce: #EDE5D3;
+  --color-blanc-casse: #FAF7F0;
+
+  --color-encre: #1C1C1C;
+  --color-encre-fonce: #0A0A0A;
+  --color-ardoise: #2D3142;
+
+  /* ──── Tokens sémantiques ──── */
+  --background: var(--color-ivoire);
+  --foreground: var(--color-encre);
+  --primary: var(--color-bleu-majorelle);
+  --accent: var(--color-or-doux);
+  --muted: var(--color-pierre);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+
+  --color-bleu-majorelle: var(--color-bleu-majorelle);
+  --color-bleu-turquoise: var(--color-bleu-turquoise);
+  --color-bleu-chefchaouen: var(--color-bleu-chefchaouen);
+  --color-bleu-nuit: var(--color-bleu-nuit);
+  --color-bleu-cosmique: var(--color-bleu-cosmique);
+
+  --color-or-doux: var(--color-or-doux);
+  --color-or-clair: var(--color-or-clair);
+  --color-cuivre: var(--color-cuivre);
+
+  --color-terre-cuite: var(--color-terre-cuite);
+  --color-sable: var(--color-sable);
+  --color-pierre: var(--color-pierre);
+
+  --color-ivoire: var(--color-ivoire);
+  --color-ivoire-fonce: var(--color-ivoire-fonce);
+  --color-blanc-casse: var(--color-blanc-casse);
+
+  --color-encre: var(--color-encre);
+  --color-encre-fonce: var(--color-encre-fonce);
+  --color-ardoise: var(--color-ardoise);
+
+  --font-serif: var(--font-cormorant);
+  --font-sans: var(--font-inter);
+  --font-arabic: var(--font-amiri);
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  /* Scroll natif instantané - pas de smooth-scroll artificiel */
+  scroll-behavior: auto;
+  /* Empêche le rebond iOS sur le body */
+  overscroll-behavior: none;
+}
+
+html, body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+/* ──── Sélection ──── */
+::selection {
+  background: var(--color-or-doux);
+  color: var(--color-encre);
+}
+
+/* Pas de scrollbar custom : scrollbar natif discret du navigateur */
+
+/* ──── Utilitaires custom ──── */
+
+/* Hauteur de la zone collante du héros.
+   Desktop : 100vh strict (comportement d'origine, scrub GSAP stable et fluide).
+   Mobile (<768px) : 100dvh (état d'origine). On ne touche PLUS à cette unité :
+   svh laissait un trou en bas quand la barre Safari se rétracte, lvh un trou en
+   haut. dvh suit le viewport dynamique et ne crée pas de vide. Les artefacts de
+   canvas (flash, étirement) sont gérés côté JS, pas en changeant cette hauteur. */
+.hero-sticky-height {
+  height: 100vh;
+}
+@media (max-width: 767px) {
+  .hero-sticky-height {
+    height: 100dvh;
+  }
+}
+
+/* Hauteur du CANVAS du héros (distincte de la zone collante).
+   Desktop : 100vh. Mobile : 100lvh = grande hauteur (barre Safari rétractée),
+   valeur STABLE qui ne change pas quand la barre se rétracte au scroll. Le
+   canvas garde donc des dimensions internes constantes : pas de réallocation,
+   pas de fond bleu marine vide, pas d'effet de zoom. La zone collante reste en
+   dvh pour le placement du contenu (CTA) ; le canvas, lui, couvre toujours via
+   une hauteur >= au viewport, l'excédent étant masqué par overflow-hidden. */
+.hero-canvas-height {
+  height: 100vh;
+}
+@media (max-width: 767px) {
+  .hero-canvas-height {
+    height: 100lvh;
+  }
+}
+
+.text-gravure {
+  /* Effet "gravé dans la pierre" pour les textes en overlay */
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.4),
+    0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 0 12px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.08em;
+}
+
+.text-mystique {
+  background: linear-gradient(
+    135deg,
+    var(--color-or-clair) 0%,
+    var(--color-or-doux) 50%,
+    var(--color-cuivre) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ──── Split-screen Médias : bord diagonal côté gauche ──── */
+@media (min-width: 1024px) {
+  .medias-left-diagonal {
+    clip-path: polygon(0 0, 100% 0, calc(100% - 90px) 100%, 0 100%);
+  }
+}
+
+/* ──── Perspective 3D pour les portes ──── */
+.perspective-door {
+  perspective: 1800px;
+  perspective-origin: 50% 50%;
+}
+
+/* ──── Animation flèche de scroll ──── */
+@keyframes scroll-hint {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+
+.animate-scroll-hint {
+  animation: scroll-hint 2s ease-in-out infinite;
+}
+
+/* ──── Animation scintillement étoiles ──── */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.animate-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+/* ──── Scrollbar hidden (pour carousels horizontaux) ──── */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ──── Fluidité : GPU compositing sur les éléments animés ──── */
+[data-framer-motion],
+.motion-safe\:will-change-transform {
+  will-change: transform, opacity;
+}
+
+/* Transitions de page fluides */
+@view-transition {
+  navigation: auto;
+}
