@@ -5,6 +5,9 @@ import { EyeOff, Lock, ShieldCheck } from "lucide-react";
 
 const EASE_LUXE = [0.22, 1, 0.36, 1] as const;
 
+// Defauts en dur : le site ne se vide jamais si Sanity est vide ou hors-ligne.
+// Seuls les textes (titre, texte) sont editables ; l'icone et la couleur
+// d'accent restent cote code (non editoriaux).
 const PILIERS = [
   {
     Icon: EyeOff,
@@ -26,7 +29,25 @@ const PILIERS = [
   },
 ];
 
-export function Discretion() {
+// Contenu editable injecte depuis Sanity (page d'accueil, groupe Discretion).
+// Tous les champs sont optionnels : repli sur les defauts ci-dessus.
+export type DiscretionContent = {
+  surtitre?: string;
+  titre?: string;
+  titreItalique?: string;
+  piliers?: { titre?: string; texte?: string }[];
+};
+
+function val(value: string | undefined, fallback: string): string {
+  return value && value.trim().length > 0 ? value : fallback;
+}
+
+export function Discretion({ content }: { content?: DiscretionContent } = {}) {
+  const piliers = PILIERS.map((p, i) => ({
+    ...p,
+    titre: val(content?.piliers?.[i]?.titre, p.titre),
+    texte: val(content?.piliers?.[i]?.texte, p.texte),
+  }));
   return (
     <section
       id="discretion"
@@ -57,18 +78,18 @@ export function Discretion() {
         >
           <div className="inline-flex items-center gap-3 mb-5">
             <span className="h-px w-8 bg-or-doux/60" />
-            <p className="font-sans text-encre/70 text-[10px] tracking-[0.5em] uppercase">Votre visite vous appartient</p>
+            <p className="font-sans text-encre/70 text-[10px] tracking-[0.5em] uppercase">{val(content?.surtitre, "Votre visite vous appartient")}</p>
             <span className="h-px w-8 bg-or-doux/60" />
           </div>
           <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-encre leading-[1.02] tracking-tight">
-            Venez en toute{" "}
-            <span className="italic text-bleu-majorelle">discrétion.</span>
+            {val(content?.titre, "Venez en toute")}{" "}
+            <span className="italic text-bleu-majorelle">{val(content?.titreItalique, "discrétion.")}</span>
           </h2>
         </motion.div>
 
         {/* 3 piliers : cartes colorées par pilier, icône seule (sans numéro) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
-          {PILIERS.map((p, i) => {
+          {piliers.map((p, i) => {
           const PilierIcon = p.Icon;
           return (
             <motion.div

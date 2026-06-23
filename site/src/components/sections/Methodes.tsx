@@ -41,6 +41,21 @@ const METHODES = [
   },
 ];
 
+// Contenu editable injecte depuis Sanity (page d'accueil, groupe Apercu des
+// methodes). Tous les champs sont optionnels : repli sur les defauts en dur.
+// Seuls les textes sont editables ; les icones et couleurs restent cote code.
+export type MethodesContent = {
+  surtitre?: string;
+  titre?: string;
+  titreItalique?: string;
+  description?: string;
+  cartes?: { titre?: string; description?: string }[];
+};
+
+function val(value: string | undefined, fallback: string): string {
+  return value && value.trim().length > 0 ? value : fallback;
+}
+
 const EASE_LUXE = [0.22, 1, 0.36, 1] as const;
 
 const containerVariants = {
@@ -60,7 +75,12 @@ const bubbleVariants = {
   },
 };
 
-export function Methodes() {
+export function Methodes({ content }: { content?: MethodesContent } = {}) {
+  const methodes = METHODES.map((m, i) => ({
+    ...m,
+    title: val(content?.cartes?.[i]?.titre, m.title),
+    short: val(content?.cartes?.[i]?.description, m.short),
+  }));
   return (
     <section
       id="methodes"
@@ -98,17 +118,19 @@ export function Methodes() {
           <div className="inline-flex items-center gap-3 mb-4">
             <span className="h-px w-10 bg-or-doux/70" />
             <p className="text-encre font-sans text-xs tracking-[0.45em] uppercase">
-              Comment je travaille
+              {val(content?.surtitre, "Comment je travaille")}
             </p>
             <span className="h-px w-10 bg-or-doux/70" />
           </div>
           <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-encre leading-[1.05] tracking-tight mb-5">
-            Quatre approches,{" "}
-            <span className="italic text-bleu-majorelle">une heure.</span>
+            {val(content?.titre, "Quatre approches,")}{" "}
+            <span className="italic text-bleu-majorelle">{val(content?.titreItalique, "une heure.")}</span>
           </h2>
           <p className="font-sans text-encre/72 text-base md:text-lg leading-relaxed">
-            Quatre méthodes combinées dans une seule consultation. Pas de
-            prédictions floues : des éléments concrets et vérifiables.
+            {val(
+              content?.description,
+              "Quatre méthodes combinées dans une seule consultation. Pas de prédictions floues : des éléments concrets et vérifiables."
+            )}
           </p>
         </motion.div>
 
@@ -120,7 +142,7 @@ export function Methodes() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
         >
-          {METHODES.map((m, i) => {
+          {methodes.map((m, i) => {
             const number = i + 1;
             return (
               <motion.article

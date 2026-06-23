@@ -7,6 +7,10 @@
 # OS
 .DS_Store
 
+# Medias de travail a la racine (pas le code du site)
+*.mp4
+/ChatGPT Image*.png
+
 # Dependencies
 node_modules/
 .claude/scheduled_tasks.lock

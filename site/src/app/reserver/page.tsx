@@ -3,6 +3,23 @@ import { ArrowRight, Calendar, Check, MapPin, Mail, Phone, Repeat } from "lucide
 import { Footer } from "@/components/sections/Footer";
 import { Seuil } from "@/components/sections/Seuil";
 import { DelaiBanner } from "@/components/reservation/DelaiBanner";
+import { safeFetch, pick } from "@/lib/sanity";
+import { getPageGlobale } from "@/lib/global-content";
+
+// Contenu editorial (singleton "pageReserver"). safeFetch renvoie null si
+// Sanity est hors-ligne : repli sur les textes en dur via pick.
+const RESERVER_QUERY = `*[_id == "pageReserver"][0]{
+  surtitre, titre, titreItalique, banniereTitre, banniereTexte,
+  formules[]{surtitre, titre, description, features[], duree, prix, labelCta},
+  regulieresSurtitre, regulieresTitre, regulieresDescription, regulieresLabelCta,
+  autreSurtitre, autreTitre, autreDescription, autreLabelContact, autreLabelTel,
+  noteFooter
+}`;
+
+type Formule = {
+  surtitre?: string; titre?: string; description?: string;
+  features?: string[]; duree?: string; prix?: string; labelCta?: string;
+};
 
 export const metadata = {
   title: "Réserver · Jocelyn Amir",
@@ -10,7 +27,12 @@ export const metadata = {
     "Réservez votre consultation en ligne avec Jocelyn Amir. Une heure au cabinet ou à distance, ou 30 minutes par téléphone. Paiement sécurisé, confirmation sous 24h.",
 };
 
-export default function ReserverPage() {
+export default async function ReserverPage() {
+  const p = await safeFetch<Record<string, unknown> | null>(RESERVER_QUERY, null);
+  const global = await getPageGlobale();
+  const formules = (p?.formules as Formule[] | undefined) ?? [];
+  const f0 = formules[0] ?? {};
+  const f1 = formules[1] ?? {};
   return (
     <main className="bg-ivoire">
       <section className="relative bg-ivoire pt-24 pb-16 md:pt-36 md:pb-24 overflow-hidden">
@@ -20,11 +42,11 @@ export default function ReserverPage() {
           <div className="mb-8">
             <div className="inline-flex items-center gap-3 mb-3">
               <span className="h-px w-8 bg-or-doux/60" />
-              <p className="font-sans text-or-doux text-[11px] tracking-[0.45em] uppercase">Réservation en ligne</p>
+              <p className="font-sans text-or-doux text-[11px] tracking-[0.45em] uppercase">{pick(p?.surtitre, "Réservation en ligne")}</p>
             </div>
             <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-encre leading-tight tracking-tight">
-              Choisissez votre{" "}
-              <span className="italic text-or-doux">formule.</span>
+              {pick(p?.titre, "Choisissez votre")}{" "}
+              <span className="italic text-or-doux">{pick(p?.titreItalique, "formule.")}</span>
             </h1>
           </div>
 
@@ -35,8 +57,8 @@ export default function ReserverPage() {
           <div className="flex items-start gap-3 p-4 rounded-xl mb-10 bg-or-doux/10 border border-or-doux/30">
             <Calendar size={16} strokeWidth={1.5} className="text-or-doux shrink-0 mt-0.5" />
             <p className="font-sans text-encre/75 text-sm leading-relaxed">
-              <strong className="font-medium text-encre">La réservation se fait exclusivement en ligne.</strong>{" "}
-              Les messages et appels ne permettent pas de bloquer un créneau. Choisissez votre formule ci-dessous pour accéder au formulaire et au paiement sécurisé.
+              <strong className="font-medium text-encre">{pick(p?.banniereTitre, "La réservation se fait exclusivement en ligne.")}</strong>{" "}
+              {pick(p?.banniereTexte, "Les messages et appels ne permettent pas de bloquer un créneau. Choisissez votre formule ci-dessous pour accéder au formulaire et au paiement sécurisé.")}
             </p>
           </div>
 
@@ -61,19 +83,19 @@ export default function ReserverPage() {
                 </div>
               </div>
 
-              <p className="font-sans text-[10px] tracking-[0.3em] uppercase mb-2 text-or-clair">Au cabinet ou à distance</p>
-              <h2 className="font-serif text-3xl lg:text-4xl mb-4 text-ivoire">Une heure</h2>
+              <p className="font-sans text-[10px] tracking-[0.3em] uppercase mb-2 text-or-clair">{pick(f0.surtitre, "Au cabinet ou à distance")}</p>
+              <h2 className="font-serif text-3xl lg:text-4xl mb-4 text-ivoire">{pick(f0.titre, "Une heure")}</h2>
               <p className="font-sans text-ivoire/85 text-[14px] leading-relaxed mb-6">
-                Une heure complète, dans mon bureau zen à Saint-Clotilde ou à distance, au même tarif. Les quatre méthodes combinées sans précipitation.
+                {pick(f0.description, "Une heure complète, dans mon bureau zen à Saint-Clotilde ou à distance, au même tarif. Les quatre méthodes combinées sans précipitation.")}
               </p>
 
               <ul className="space-y-2 mb-7 text-[13px] text-ivoire/90 flex-1">
-                {[
+                {(f0.features && f0.features.length > 0 ? f0.features : [
                   "Consultation d'une heure pleine, au cabinet ou à distance",
                   "Quatre méthodes combinées en une séance",
                   "Photos, courriers ou objets bienvenus",
                   "Récap oral à la fin de la séance",
-                ].map((item) => (
+                ]).map((item) => (
                   <li key={item} className="flex gap-2.5 items-start">
                     <span className="relative shrink-0 mt-1 w-3.5 h-3.5">
                       <span aria-hidden className="absolute inset-0 rounded-full bg-or-doux/15" />
@@ -89,10 +111,10 @@ export default function ReserverPage() {
               <div className="flex items-end justify-between pt-5 mb-6 border-t border-ivoire/15">
                 <div>
                   <p className="font-sans text-[9px] tracking-[0.3em] text-ivoire/55 uppercase mb-1">Durée</p>
-                  <p className="font-sans text-base text-ivoire/95">1 heure</p>
+                  <p className="font-sans text-base text-ivoire/95">{pick(f0.duree, "1 heure")}</p>
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="font-sans font-semibold text-5xl text-or-clair leading-none tabular-nums">120</span>
+                  <span className="font-sans font-semibold text-5xl text-or-clair leading-none tabular-nums">{pick(f0.prix, "120")}</span>
                   <span className="font-sans text-xl text-or-doux/80">€</span>
                 </div>
               </div>
@@ -103,7 +125,7 @@ export default function ReserverPage() {
               >
                 <span className="flex items-center gap-2">
                   <Calendar size={14} strokeWidth={2.2} />
-                  Réserver en ligne
+                  {pick(f0.labelCta, "Réserver en ligne")}
                 </span>
                 <ArrowRight size={16} strokeWidth={2.2} className="transition-transform group-hover:translate-x-1.5" />
               </div>
@@ -123,19 +145,19 @@ export default function ReserverPage() {
                 </div>
               </div>
 
-              <p className="font-sans text-[10px] tracking-[0.3em] uppercase mb-2 text-bleu-chefchaouen">Par téléphone · Partout</p>
-              <h2 className="font-serif text-3xl lg:text-4xl mb-4 text-ivoire">30 minutes</h2>
+              <p className="font-sans text-[10px] tracking-[0.3em] uppercase mb-2 text-bleu-chefchaouen">{pick(f1.surtitre, "Par téléphone · Partout")}</p>
+              <h2 className="font-serif text-3xl lg:text-4xl mb-4 text-ivoire">{pick(f1.titre, "30 minutes")}</h2>
               <p className="font-sans text-ivoire/85 text-[14px] leading-relaxed mb-6">
-                Trente minutes par téléphone, depuis La Réunion, l&apos;Île Maurice, la métropole ou n&apos;importe où.
+                {pick(f1.description, "Trente minutes par téléphone, depuis La Réunion, l'Île Maurice, la métropole ou n'importe où.")}
               </p>
 
               <ul className="space-y-2 mb-7 text-[13px] text-ivoire/90 flex-1">
-                {[
+                {(f1.features && f1.features.length > 0 ? f1.features : [
                   "Consultation de 30 minutes par téléphone uniquement",
                   "Jocelyn vous appelle à l'heure du rendez-vous",
                   "Mêmes méthodes que le cabinet, en condensé",
                   "Aucun déplacement, où que vous soyez",
-                ].map((item) => (
+                ]).map((item) => (
                   <li key={item} className="flex gap-2.5 items-start">
                     <span className="relative shrink-0 mt-1 w-3.5 h-3.5">
                       <span aria-hidden className="absolute inset-0 rounded-full bg-bleu-chefchaouen/15" />
@@ -151,10 +173,10 @@ export default function ReserverPage() {
               <div className="flex items-end justify-between pt-5 mb-6 border-t border-ivoire/15">
                 <div>
                   <p className="font-sans text-[9px] tracking-[0.3em] text-ivoire/55 uppercase mb-1">Durée</p>
-                  <p className="font-sans text-base text-ivoire/95">30 minutes</p>
+                  <p className="font-sans text-base text-ivoire/95">{pick(f1.duree, "30 minutes")}</p>
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="font-sans font-semibold text-5xl text-ivoire leading-none tabular-nums">85</span>
+                  <span className="font-sans font-semibold text-5xl text-ivoire leading-none tabular-nums">{pick(f1.prix, "85")}</span>
                   <span className="font-sans text-xl text-or-doux/80">€</span>
                 </div>
               </div>
@@ -165,7 +187,7 @@ export default function ReserverPage() {
               >
                 <span className="flex items-center gap-2">
                   <Calendar size={14} strokeWidth={2.2} />
-                  Réserver en ligne
+                  {pick(f1.labelCta, "Réserver en ligne")}
                 </span>
                 <ArrowRight size={16} strokeWidth={2.2} className="transition-transform group-hover:translate-x-1.5" />
               </div>
@@ -186,10 +208,10 @@ export default function ReserverPage() {
             </div>
 
             <div className="flex-1">
-              <p className="font-sans text-[10px] tracking-[0.3em] uppercase mb-2 text-bleu-chefchaouen">Suivi dans la durée</p>
-              <h3 className="font-serif text-2xl md:text-3xl text-ivoire mb-2">Séances régulières, tarif préférentiel</h3>
+              <p className="font-sans text-[10px] tracking-[0.3em] uppercase mb-2 text-bleu-chefchaouen">{pick(p?.regulieresSurtitre, "Suivi dans la durée")}</p>
+              <h3 className="font-serif text-2xl md:text-3xl text-ivoire mb-2">{pick(p?.regulieresTitre, "Séances régulières, tarif préférentiel")}</h3>
               <p className="font-sans text-ivoire/80 text-sm md:text-base leading-relaxed max-w-2xl">
-                Vous souhaitez consulter plusieurs fois dans l&apos;année ? Un tarif préférentiel s&apos;applique pour un accompagnement suivi, au cabinet ou à distance. Le détail se fait sur devis, selon votre rythme.
+                {pick(p?.regulieresDescription, "Vous souhaitez consulter plusieurs fois dans l'année ? Un tarif préférentiel s'applique pour un accompagnement suivi, au cabinet ou à distance. Le détail se fait sur devis, selon votre rythme.")}
               </p>
             </div>
 
@@ -198,7 +220,7 @@ export default function ReserverPage() {
               className="group/btn shrink-0 inline-flex items-center gap-2 px-6 py-3.5 rounded-full font-sans text-[12px] tracking-[0.2em] uppercase font-semibold text-encre transition-all group-hover:brightness-110"
               style={{ background: "#7DB5C7", boxShadow: "0 12px 30px -10px rgba(125,181,199,0.6)" }}
             >
-              <span>Demander un devis</span>
+              <span>{pick(p?.regulieresLabelCta, "Demander un devis")}</span>
               <ArrowRight size={15} strokeWidth={2.2} className="transition-transform group-hover/btn:translate-x-1" />
             </Link>
           </div>
@@ -210,10 +232,10 @@ export default function ReserverPage() {
           >
             <div aria-hidden className="absolute top-0 left-12 right-12 h-px bg-gradient-to-r from-transparent via-or-doux/40 to-transparent" />
 
-            <p className="font-sans text-[10px] tracking-[0.45em] uppercase text-encre/40 mb-3">Autre demande</p>
-            <h3 className="font-serif text-2xl md:text-3xl text-encre mb-3">Coaching de vie ou question spécifique ?</h3>
+            <p className="font-sans text-[10px] tracking-[0.45em] uppercase text-encre/40 mb-3">{pick(p?.autreSurtitre, "Autre demande")}</p>
+            <h3 className="font-serif text-2xl md:text-3xl text-encre mb-3">{pick(p?.autreTitre, "Coaching de vie ou question spécifique ?")}</h3>
             <p className="font-sans text-encre/65 text-sm md:text-base leading-relaxed mb-6 max-w-xl">
-              Pour un accompagnement coaching, une question avant de réserver, ou toute autre demande, contactez directement Jocelyn.
+              {pick(p?.autreDescription, "Pour un accompagnement coaching, une question avant de réserver, ou toute autre demande, contactez directement Jocelyn.")}
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
@@ -221,26 +243,26 @@ export default function ReserverPage() {
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-sans text-xs tracking-[0.2em] uppercase font-medium bg-encre text-ivoire hover:bg-encre/85 transition-colors"
               >
                 <Mail size={13} strokeWidth={2} />
-                <span>Envoyer un message</span>
+                <span>{pick(p?.autreLabelContact, "Envoyer un message")}</span>
               </Link>
               <Link
                 href="tel:+262692813606"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-sans text-xs tracking-[0.2em] uppercase border border-encre/25 text-encre hover:border-encre/50 transition-colors"
               >
                 <Phone size={13} strokeWidth={2} />
-                <span>Appeler</span>
+                <span>{pick(p?.autreLabelTel, "Appeler")}</span>
               </Link>
             </div>
           </div>
 
           <p className="text-center font-serif italic text-encre/55 text-sm mt-10 max-w-2xl mx-auto">
-            Paiement sécurisé. Après le règlement, vous êtes recontacté sous 24h pour confirmer votre rendez-vous. Annulation possible jusqu&apos;à 24h avant.
+            {pick(p?.noteFooter, "Paiement sécurisé. Après le règlement, vous êtes recontacté sous 24h pour confirmer votre rendez-vous. Annulation possible jusqu'à 24h avant.")}
           </p>
         </div>
       </section>
 
-      <Seuil />
-      <Footer />
+      <Seuil content={global.seuil} />
+      <Footer content={global.footer} />
     </main>
   );
 }

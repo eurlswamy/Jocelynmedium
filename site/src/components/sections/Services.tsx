@@ -81,7 +81,47 @@ const SERVICES = [
   },
 ];
 
-export function Services({ compact = false }: { compact?: boolean }) {
+// Contenu editable injecte depuis Sanity (singleton "pageServices").
+// Tous les champs sont optionnels : repli sur les defauts ci-dessus.
+export type ServicesContent = {
+  surtitre?: string;
+  titre?: string;
+  titreItalique?: string;
+  description?: string;
+  formules?: {
+    surtitre?: string;
+    titre?: string;
+    duree?: string;
+    prix?: string;
+    accroche?: string;
+    features?: string[];
+    tag?: string;
+    labelCta?: string;
+  }[];
+};
+
+function val(value: string | undefined, fallback: string): string {
+  return value && value.trim().length > 0 ? value : fallback;
+}
+
+export function Services({ compact = false, content }: { compact?: boolean; content?: ServicesContent } = {}) {
+  const services = SERVICES.map((s, i) => {
+    const f = content?.formules?.[i];
+    const features = Array.isArray(f?.features) && f.features.filter((x) => typeof x === "string" && x.trim().length > 0).length > 0
+      ? f.features
+      : s.features;
+    return {
+      ...s,
+      eyebrow: val(f?.surtitre, s.eyebrow),
+      title: val(f?.titre, s.title),
+      duration: val(f?.duree, s.duration),
+      price: s.price === null ? (f?.prix && f.prix.trim().length > 0 ? f.prix : null) : val(f?.prix, s.price),
+      hook: val(f?.accroche, s.hook),
+      features,
+      tag: s.tag === null ? (f?.tag && f.tag.trim().length > 0 ? f.tag : null) : val(f?.tag, s.tag),
+      labelCta: f?.labelCta && f.labelCta.trim().length > 0 ? f.labelCta : null,
+    };
+  });
   return (
     <section
       id="services"
@@ -103,22 +143,22 @@ export function Services({ compact = false }: { compact?: boolean }) {
         >
           <div className="flex items-center gap-3 mb-4">
             <span className="h-px w-10 bg-or-doux/60" />
-            <p className="text-or-clair font-sans text-xs tracking-[0.45em] uppercase">Formules de consultation</p>
+            <p className="text-or-clair font-sans text-xs tracking-[0.45em] uppercase">{val(content?.surtitre, "Formules de consultation")}</p>
           </div>
           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-ivoire leading-tight tracking-tight">
-            Plusieurs façons de{" "}
-            <span className="italic text-or-clair">vous accompagner.</span>
+            {val(content?.titre, "Plusieurs façons de")}{" "}
+            <span className="italic text-or-clair">{val(content?.titreItalique, "vous accompagner.")}</span>
           </h2>
           {!compact && (
             <p className="font-sans text-ivoire/85 text-base mt-4 max-w-xl">
-              Paiement sécurisé en ligne · Confirmation sous 24h · Annulation jusqu&apos;à 24h avant
+              {val(content?.description, "Paiement sécurisé en ligne · Confirmation sous 24h · Annulation jusqu'à 24h avant")}
             </p>
           )}
         </motion.div>
 
         {/* Grille 3 cartes style pricing */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 items-stretch">
-          {SERVICES.map((s, i) => {
+          {services.map((s, i) => {
             const Icon = s.Icon;
             return (
               <motion.div
@@ -232,7 +272,7 @@ export function Services({ compact = false }: { compact?: boolean }) {
                     }
                   >
                     <Calendar size={12} strokeWidth={2} />
-                    <span>{s.price === null ? "Nous contacter" : "Réserver en ligne"}</span>
+                    <span>{val(s.labelCta ?? undefined, s.price === null ? "Nous contacter" : "Réserver en ligne")}</span>
                     <ArrowRight size={11} className="transition-transform group-hover/cta:translate-x-1" />
                   </Link>
                 </div>

@@ -191,6 +191,14 @@ export function ContactForm() {
           Je réponds personnellement sous 24h.
         </p>
       )}
+
+      <p className="font-sans text-encre/40 text-[11px] text-center leading-relaxed">
+        Les informations recueillies servent uniquement à répondre à votre demande. Voir notre{" "}
+        <a href="/confidentialite" className="text-bleu-majorelle hover:underline">
+          politique de confidentialité
+        </a>
+        .
+      </p>
     </form>
   );
 }

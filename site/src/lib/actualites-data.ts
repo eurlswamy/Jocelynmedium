@@ -110,3 +110,69 @@ Ces prix m'ont ouvert des portes, le Festival de Cannes notamment, mais ne m'ont
 ];
 
 export const TAGS = ["Tout", "Émissions", "Distinctions", "Coaching", "Médias"];
+
+// --- Lecture Sanity (type 'actualite') avec repli sur les donnees en dur ---
+
+type PTSpan = { _type?: string; text?: string };
+type PTBlock = {
+  _type?: string;
+  style?: string;
+  listItem?: string;
+  children?: PTSpan[];
+};
+
+// Convertit du Portable Text (array de blocks Sanity) en chaine compatible avec
+// le rendu de la page article : double saut de ligne entre blocks, prefixe
+// "- " pour les listes a puces, "**...**" pour les titres (style h2/h3).
+export function portableTextToString(blocks: unknown): string {
+  if (!Array.isArray(blocks)) return typeof blocks === "string" ? blocks : "";
+  return (blocks as PTBlock[])
+    .map((block) => {
+      if (!block || block._type !== "block") return "";
+      const text = (block.children ?? []).map((c) => c?.text ?? "").join("");
+      if (!text.trim()) return "";
+      if (block.listItem === "bullet") return "- " + text;
+      if (block.style === "h2" || block.style === "h3" || block.style === "h4") {
+        return "**" + text + "**";
+      }
+      return text;
+    })
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+// Forme brute renvoyee par la query Sanity (avant mapping vers Actualite).
+type SanityActualite = {
+  titre?: string;
+  slug?: string;
+  date?: string;
+  annee?: number;
+  tag?: string;
+  tagColor?: string;
+  resume?: string;
+  contenu?: unknown;
+  image?: string;
+};
+
+// Mappe une actualite Sanity vers la forme attendue par les pages. Les champs
+// vides retombent sur des valeurs sures. Si le client n'a pas mis d'image dans
+// le Studio, on retombe sur une image de fond generique.
+export function mapSanityActualite(a: SanityActualite): Actualite {
+  return {
+    slug: a.slug ?? "",
+    date: a.date ?? (a.annee ? String(a.annee) : ""),
+    annee: typeof a.annee === "number" ? a.annee : 0,
+    tag: a.tag ?? "Médias",
+    tagColor: a.tagColor ?? "#2D3142",
+    image: a.image ?? "/images/backgrounds/medias-bg.webp",
+    titre: a.titre ?? "",
+    resume: a.resume ?? "",
+    contenu: portableTextToString(a.contenu),
+  };
+}
+
+// Query GROQ partagee : actualites publiees, triees par annee decroissante.
+export const ACTUALITES_QUERY = `*[_type=="actualite" && statut=="publie"]|order(annee desc){
+  titre, "slug": slug.current, date, annee, tag, tagColor, resume, "contenu": contenu,
+  "image": image.asset->url
+}`;

@@ -6,7 +6,26 @@ import { Calendar, Mail, ArrowRight, Sparkles } from "lucide-react";
 
 const EASE_LUXE = [0.22, 1, 0.36, 1] as const;
 
-export function Seuil() {
+// Contenu editable injecte depuis Sanity (singleton "pageGlobale", groupe
+// Bloc d'appel final). Tous les champs sont optionnels : repli sur les textes
+// d'origine en dur ci-dessous.
+export type SeuilContent = {
+  surtitre?: string;
+  titre?: string;
+  titreItalique?: string;
+  description?: string;
+  ctaReserver?: string;
+  ctaQuestion?: string;
+  mention1?: string;
+  mention2?: string;
+  mention3?: string;
+};
+
+function val(value: string | undefined, fallback: string): string {
+  return value && value.trim().length > 0 ? value : fallback;
+}
+
+export function Seuil({ content }: { content?: SeuilContent } = {}) {
   return (
     <section
       id="seuil"
@@ -89,7 +108,7 @@ export function Seuil() {
           className="text-or-clair font-sans text-xs md:text-sm tracking-[0.5em] uppercase mb-7"
           style={{ textShadow: "0 2px 10px rgba(0,0,0,0.7)" }}
         >
-          Prêt à franchir le seuil
+          {val(content?.surtitre, "Prêt à franchir le seuil")}
         </motion.p>
 
         <motion.h2
@@ -100,9 +119,9 @@ export function Seuil() {
           className="font-serif text-4xl md:text-5xl lg:text-6xl text-ivoire leading-[1.02] tracking-tight mb-6"
           style={{ textShadow: "0 4px 30px rgba(0,0,0,0.8), 0 2px 12px rgba(0,0,0,0.6)" }}
         >
-          Encore une question,
+          {val(content?.titre, "Encore une question,")}
           <br />
-          <span className="italic text-or-clair">ou prêt à réserver&nbsp;?</span>
+          <span className="italic text-or-clair">{val(content?.titreItalique, "ou prêt à réserver ?")}</span>
         </motion.h2>
 
         <motion.p
@@ -113,9 +132,7 @@ export function Seuil() {
           className="font-sans text-ivoire/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto mb-12 md:mb-14"
           style={{ textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}
         >
-          Posez-moi votre question par email, ou réservez directement votre
-          créneau. Vous êtes recontacté sous 24h pour confirmer, annulation
-          possible jusqu&apos;à 24h avant le rendez-vous.
+          {val(content?.description, "Posez-moi votre question par email, ou réservez directement votre créneau. Vous êtes recontacté sous 24h pour confirmer, annulation possible jusqu'à 24h avant le rendez-vous.")}
         </motion.p>
 
         {/* CTAs */}
@@ -132,7 +149,7 @@ export function Seuil() {
           >
             <span className="flex items-center gap-2.5">
               <Calendar size={16} strokeWidth={2} />
-              <span>Réserver une consultation</span>
+              <span>{val(content?.ctaReserver, "Réserver une consultation")}</span>
             </span>
             <ArrowRight size={16} strokeWidth={2} className="transition-transform group-hover:translate-x-1" />
           </Link>
@@ -143,7 +160,7 @@ export function Seuil() {
           >
             <span className="flex items-center gap-2.5">
               <Mail size={16} strokeWidth={2} />
-              <span>Poser une question</span>
+              <span>{val(content?.ctaQuestion, "Poser une question")}</span>
             </span>
             <ArrowRight size={16} strokeWidth={2} className="transition-transform group-hover:translate-x-1" />
           </Link>
@@ -160,15 +177,15 @@ export function Seuil() {
         >
           <span className="flex items-center gap-1.5">
             <span className="w-1 h-1 rounded-full bg-or-doux" />
-            Paiement sécurisé par Stripe
+            {val(content?.mention1, "Paiement sécurisé par Stripe")}
           </span>
           <span className="flex items-center gap-1.5">
             <span className="w-1 h-1 rounded-full bg-or-doux" />
-            Confirmation sous 24h
+            {val(content?.mention2, "Confirmation sous 24h")}
           </span>
           <span className="flex items-center gap-1.5">
             <span className="w-1 h-1 rounded-full bg-or-doux" />
-            Confidentialité absolue
+            {val(content?.mention3, "Confidentialité absolue")}
           </span>
         </motion.div>
       </div>

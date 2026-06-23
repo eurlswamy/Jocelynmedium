@@ -39,8 +39,31 @@ const QUESTIONS = [
   },
 ];
 
-export function FAQ() {
+// Contenu editable injecte depuis Sanity (page d'accueil, groupe FAQ).
+// En-tete et liste des questions editables ; repli sur les valeurs en dur.
+export type FaqContent = {
+  surtitre?: string;
+  titre?: string;
+  titreItalique?: string;
+  questions?: { question?: string; reponse?: string }[];
+};
+
+function val(value: string | undefined, fallback: string): string {
+  return value && value.trim().length > 0 ? value : fallback;
+}
+
+export function FAQ({ content }: { content?: FaqContent } = {}) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  // Repli : on prend les questions Sanity si au moins une est remplie,
+  // sinon les questions d'origine en dur. Le site ne se vide jamais.
+  const sanityQuestions = (content?.questions ?? [])
+    .map((item) => ({
+      q: (item?.question ?? "").trim(),
+      a: (item?.reponse ?? "").trim(),
+    }))
+    .filter((item) => item.q.length > 0 && item.a.length > 0);
+  const questions = sanityQuestions.length > 0 ? sanityQuestions : QUESTIONS;
 
   return (
     <section
@@ -58,18 +81,18 @@ export function FAQ() {
           <div className="flex items-center justify-center gap-3 mb-5">
             <span className="h-px w-10 bg-or-doux" />
             <p className="text-bleu-majorelle font-sans text-xs tracking-[0.45em] uppercase">
-              Avant de prendre rendez-vous
+              {val(content?.surtitre, "Avant de prendre rendez-vous")}
             </p>
             <span className="h-px w-10 bg-or-doux" />
           </div>
           <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-encre leading-[1.02] tracking-tight">
-            Vos questions,{" "}
-            <span className="italic text-bleu-majorelle">mes réponses.</span>
+            {val(content?.titre, "Vos questions,")}{" "}
+            <span className="italic text-bleu-majorelle">{val(content?.titreItalique, "mes réponses.")}</span>
           </h2>
         </motion.div>
 
         <div className="space-y-3">
-          {QUESTIONS.map((item, i) => {
+          {questions.map((item, i) => {
             const isOpen = openIndex === i;
             return (
               <motion.div

@@ -3,15 +3,41 @@ import Link from "next/link";
 import { ChevronLeft, Calendar, ArrowRight } from "lucide-react";
 import { Footer } from "@/components/sections/Footer";
 import { Seuil } from "@/components/sections/Seuil";
-import { ACTUALITES } from "@/lib/actualites-data";
+import {
+  ACTUALITES,
+  ACTUALITES_QUERY,
+  mapSanityActualite,
+  type Actualite,
+} from "@/lib/actualites-data";
+import { safeFetch, pick } from "@/lib/sanity";
+import { getPageGlobale } from "@/lib/global-content";
 
-export function generateStaticParams() {
-  return ACTUALITES.map((a) => ({ slug: a.slug }));
+// Source des articles : Sanity (type 'actualite' publie) avec REPLI sur les
+// actualites en dur si Sanity renvoie vide ou est hors-ligne. La fusion par slug
+// donne la priorite a Sanity tout en garantissant que les articles d'origine
+// restent accessibles (le site ne casse jamais).
+async function getActualites(): Promise<Actualite[]> {
+  const sanity = await safeFetch<Record<string, unknown>[]>(ACTUALITES_QUERY, []);
+  const mapped = (sanity ?? []).map(mapSanityActualite).filter((a) => a.slug);
+  const bySlug = new Map<string, Actualite>();
+  for (const a of ACTUALITES) bySlug.set(a.slug, a);
+  for (const a of mapped) bySlug.set(a.slug, a); // Sanity ecrase le defaut
+  return Array.from(bySlug.values());
+}
+
+const LABELS_QUERY = `*[_id == "pageActualites"][0]{
+  labelAutresArticles, labelCtaReserver, labelCtaQuestion
+}`;
+
+export async function generateStaticParams() {
+  const actus = await getActualites();
+  return actus.map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const article = ACTUALITES.find((a) => a.slug === slug);
+  const actus = await getActualites();
+  const article = actus.find((a) => a.slug === slug);
   if (!article) return {};
   return {
     title: `${article.titre} · Jocelyn Amir`,
@@ -21,10 +47,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const article = ACTUALITES.find((a) => a.slug === slug);
+  const [actus, labels] = await Promise.all([
+    getActualites(),
+    safeFetch<Record<string, unknown> | null>(LABELS_QUERY, null),
+  ]);
+  const global = await getPageGlobale();
+  const article = actus.find((a) => a.slug === slug);
   if (!article) notFound();
 
-  const autres = ACTUALITES.filter((a) => a.slug !== article.slug).slice(0, 2);
+  const autres = actus.filter((a) => a.slug !== article.slug).slice(0, 2);
 
   const paragraphs = article.contenu.split("\n\n").filter(Boolean);
 
@@ -111,13 +142,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-sans text-xs tracking-[0.22em] uppercase font-medium bg-or-doux text-encre hover:bg-or-clair transition-colors"
             >
               <Calendar size={13} strokeWidth={2} />
-              <span>Réserver une consultation</span>
+              <span>{pick(labels?.labelCtaReserver, "Réserver une consultation")}</span>
             </Link>
             <Link
               href="/contact"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-sans text-xs tracking-[0.22em] uppercase border border-encre/25 text-encre hover:border-encre/50 transition-colors"
             >
-              <span>Poser une question</span>
+              <span>{pick(labels?.labelCtaQuestion, "Poser une question")}</span>
               <ArrowRight size={12} strokeWidth={2} />
             </Link>
           </div>
@@ -128,7 +159,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       {autres.length > 0 && (
         <section className="bg-blanc-casse py-12 md:py-16 border-t border-encre/8">
           <div className="max-w-3xl mx-auto px-6 md:px-12">
-            <p className="font-sans text-xs tracking-[0.45em] uppercase text-encre/40 mb-8">Autres articles</p>
+            <p className="font-sans text-xs tracking-[0.45em] uppercase text-encre/40 mb-8">{pick(labels?.labelAutresArticles, "Autres articles")}</p>
             <div className="grid sm:grid-cols-2 gap-5">
               {autres.map((a) => (
                 <Link
@@ -162,8 +193,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      <Seuil />
-      <Footer />
+      <Seuil content={global.seuil} />
+      <Footer content={global.footer} />
     </main>
   );
 }

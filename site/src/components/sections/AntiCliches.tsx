@@ -6,7 +6,23 @@ import { ArrowRight } from "lucide-react";
 
 const EASE_LUXE = [0.22, 1, 0.36, 1] as const;
 
-export function AntiCliches() {
+// Contenu editable injecte depuis Sanity (singleton "pageGlobale", groupe
+// Citation manifeste). Tous les champs sont optionnels : repli sur les textes
+// d'origine en dur ci-dessous.
+export type AntiClichesContent = {
+  citation?: string;
+  citationItalique?: string;
+  suite?: string;
+  auteur?: string;
+  cta1?: string;
+  cta2?: string;
+};
+
+function val(value: string | undefined, fallback: string): string {
+  return value && value.trim().length > 0 ? value : fallback;
+}
+
+export function AntiCliches({ content }: { content?: AntiClichesContent } = {}) {
   return (
     <section
       id="anti-cliches"
@@ -70,17 +86,17 @@ export function AntiCliches() {
               className="font-serif text-xl md:text-2xl lg:text-[1.85rem] text-ivoire leading-[1.42] tracking-tight mb-5"
               style={{ textWrap: "balance" }}
             >
-              Je ne vends pas de rêves. Des faits vérifiables{" "}
+              {val(content?.citation, "Je ne vends pas de rêves. Des faits vérifiables")}{" "}
               <span className="italic text-or-clair">
-                au moment même de la séance.
+                {val(content?.citationItalique, "au moment même de la séance.")}
               </span>{" "}
-              Pas de sorts, pas de mise en scène, pas de dépendance.
+              {val(content?.suite, "Pas de sorts, pas de mise en scène, pas de dépendance.")}
             </blockquote>
 
             <div className="flex items-center gap-3 mb-8">
               <span className="h-px w-6 bg-or-doux/50" />
               <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-or-clair/75">
-                Jocelyn Amir Swamy · Médium voyant
+                {val(content?.auteur, "Jocelyn Amir Swamy · Médium voyant")}
               </p>
             </div>
 
@@ -89,14 +105,14 @@ export function AntiCliches() {
                 href="/a-propos"
                 className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-or-doux text-encre hover:bg-or-clair transition-all font-sans text-xs tracking-[0.22em] uppercase font-medium shadow-[0_14px_40px_-10px_rgba(201,169,97,0.7)] self-start sm:self-auto"
               >
-                <span>Mon parcours</span>
+                <span>{val(content?.cta1, "Mon parcours")}</span>
                 <ArrowRight size={13} strokeWidth={2} className="transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 href="/reserver"
                 className="group hidden sm:inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-ivoire/35 text-ivoire bg-transparent hover:border-or-doux/70 hover:bg-ivoire/5 transition-all font-sans text-xs tracking-[0.22em] uppercase"
               >
-                <span>Prendre rendez-vous</span>
+                <span>{val(content?.cta2, "Prendre rendez-vous")}</span>
                 <ArrowRight size={13} strokeWidth={2} className="transition-transform group-hover:translate-x-1" />
               </Link>
             </div>

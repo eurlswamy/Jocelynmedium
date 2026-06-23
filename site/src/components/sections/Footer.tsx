@@ -20,7 +20,37 @@ function FacebookIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-export function Footer() {
+// Contenu editable injecte depuis Sanity (singleton "pageGlobale", groupe
+// Pied de page). Tous les champs sont optionnels : repli sur les textes
+// d'origine en dur ci-dessous.
+export type FooterContent = {
+  titre?: string;
+  description?: string;
+  contactTitre?: string;
+  ville?: string;
+  region?: string;
+  telephone?: string;
+  email?: string;
+  retrouveTitre?: string;
+  tv?: string;
+  radio?: string;
+  social?: string;
+  copyright?: string;
+  credit?: string;
+};
+
+function val(value: string | undefined, fallback: string): string {
+  return value && value.trim().length > 0 ? value : fallback;
+}
+
+export function Footer({ content }: { content?: FooterContent } = {}) {
+  const annee = new Date().getFullYear();
+  const copyright = val(content?.copyright, "{annee} Jocelyn Amir. Tous droits réservés.").replace(
+    "{annee}",
+    String(annee)
+  );
+  // Le credit du createur conserve le lien vers Fondationstudio.fr : seul le
+  // texte avant le lien est editable, le mot "Fondationstudio.fr" reste cliquable.
   return (
     // pb large sur mobile : le CTA flottant « Réserver » ne recouvre plus le crédit
     <footer className="relative text-ivoire pt-20 pb-28 md:pb-10 overflow-hidden">
@@ -49,43 +79,44 @@ export function Footer() {
 
           <div className="md:col-span-5">
             <div className="font-serif text-xl tracking-[0.3em] mb-3">
-              JOCELYN AMIR
+              {val(content?.titre, "JOCELYN AMIR")}
               <span className="text-or-clair"> · </span>
               <span className="text-ivoire/70">MÉDIUM</span>
             </div>
             <p className="font-sans text-ivoire/65 text-sm leading-relaxed max-w-sm mb-6">
-              Médium voyant à La Réunion. Clairvoyance, clairaudience, tirage
-              de cartes et voyance sur photo. Au cabinet à Saint-Clotilde ou à
-              distance.
+              {val(content?.description, "Médium voyant à La Réunion. Clairvoyance, clairaudience, tirage de cartes et voyance sur photo. Au cabinet à Saint-Clotilde ou à distance.")}
             </p>
           </div>
 
           <div className="md:col-span-4">
             <h4 className="font-serif text-or-clair text-xs tracking-[0.4em] uppercase mb-5">
-              Me contacter
+              {val(content?.contactTitre, "Me contacter")}
             </h4>
             <ul className="space-y-4 text-sm">
               <li className="flex gap-3 items-start text-ivoire/80">
                 <MapPin size={16} className="text-or-doux mt-1 shrink-0" />
                 <span>
-                  Saint-Clotilde
+                  {val(content?.ville, "Saint-Clotilde")}
                   <br />
-                  La Réunion (974)
+                  {val(content?.region, "La Réunion (974)")}
                 </span>
               </li>
               <li className="flex gap-3 items-center text-ivoire/80">
                 <Phone size={16} className="text-or-doux shrink-0" />
-                <a href="tel:+262692813606" className="hover:text-or-clair transition-colors">
-                  +262 692 81 36 06
+                <a
+                  href={`tel:${val(content?.telephone, "+262 692 81 36 06").replace(/\s+/g, "")}`}
+                  className="hover:text-or-clair transition-colors"
+                >
+                  {val(content?.telephone, "+262 692 81 36 06")}
                 </a>
               </li>
               <li className="flex gap-3 items-center text-ivoire/80">
                 <Mail size={16} className="text-or-doux shrink-0" />
                 <a
-                  href="mailto:contact@jocelynamir.com"
+                  href={`mailto:${val(content?.email, "contact@jocelynamir.com")}`}
                   className="hover:text-or-clair transition-colors"
                 >
-                  contact@jocelynamir.com
+                  {val(content?.email, "contact@jocelynamir.com")}
                 </a>
               </li>
             </ul>
@@ -93,23 +124,23 @@ export function Footer() {
 
           <div className="md:col-span-3">
             <h4 className="font-serif text-or-clair text-xs tracking-[0.4em] uppercase mb-5">
-              On me retrouve
+              {val(content?.retrouveTitre, "On me retrouve")}
             </h4>
             <ul className="space-y-3 text-sm">
               <li className="flex gap-3 items-center text-ivoire/80">
                 <Tv size={16} className="text-or-doux shrink-0" />
-                <span>Télé Kréol · mercredis 19h30</span>
+                <span>{val(content?.tv, "Télé Kréol · mercredis 19h30")}</span>
               </li>
               <li className="flex gap-3 items-center text-ivoire/80">
                 <Radio size={16} className="text-or-doux shrink-0" />
-                <span>Kréol FM</span>
+                <span>{val(content?.radio, "Kréol FM")}</span>
               </li>
               <li className="flex gap-3 items-center text-ivoire/80">
                 <span className="text-or-doux shrink-0">
                   <FacebookIcon size={16} />
                 </span>
                 <a href="#" className="hover:text-or-clair transition-colors">
-                  Facebook
+                  {val(content?.social, "Facebook")}
                 </a>
               </li>
             </ul>
@@ -117,18 +148,16 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 border-t border-ivoire/10 text-xs text-ivoire/40">
-          <p>
-            © {new Date().getFullYear()} Jocelyn Amir. Tous droits réservés.
-          </p>
+          <p>© {copyright}</p>
           <ul className="flex gap-6 items-center">
-            <li><a href="#" className="hover:text-or-clair transition-colors">Mentions légales</a></li>
-            <li><a href="#" className="hover:text-or-clair transition-colors">CGV</a></li>
-            <li><a href="#" className="hover:text-or-clair transition-colors">Confidentialité</a></li>
+            <li><a href="/mentions-legales" className="hover:text-or-clair transition-colors">Mentions légales</a></li>
+            <li><a href="/cgv" className="hover:text-or-clair transition-colors">CGV</a></li>
+            <li><a href="/confidentialite" className="hover:text-or-clair transition-colors">Confidentialité</a></li>
           </ul>
         </div>
 
         <p className="text-center font-sans text-[13px] md:text-sm text-ivoire/70 mt-8">
-          Créé par{" "}
+          {val(content?.credit, "Créé par Fondationstudio.fr").replace(/Fondationstudio\.fr/i, "").trim()}{" "}
           <a
             href="https://fondationstudio.fr"
             target="_blank"

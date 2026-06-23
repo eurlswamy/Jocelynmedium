@@ -54,7 +54,54 @@ const cardHoverTransition = { type: "spring" as const, stiffness: 260, damping: 
 
 const FRAME_COUNT = 193;
 
-export function HeroParallax() {
+// Contenu editable injecte depuis Sanity (page d'accueil, groupes Hero + Intro).
+// Tous les champs sont optionnels : repli sur les defauts en dur ci-dessous.
+// Les memes champs alimentent les versions mobile ET desktop des memes textes.
+export type HeroContent = {
+  heroBadge?: string;
+  heroTitre?: string;
+  heroTitreItalique?: string;
+  heroTitreSuite?: string;
+  heroDescription?: string;
+  heroCta1?: string;
+  heroCta2?: string;
+  introSurtitre?: string;
+  introTitre?: string;
+  introTitreItalique?: string;
+  introDescription?: string;
+  introStats?: { valeur?: string; label?: string }[];
+};
+
+function val(value: string | undefined, fallback: string): string {
+  return value && value.trim().length > 0 ? value : fallback;
+}
+
+export function HeroParallax({ content }: { content?: HeroContent } = {}) {
+  // Defauts en dur des textes editables : le site ne se vide jamais.
+  const heroBadge = val(content?.heroBadge, "Médium voyant · La Réunion · Depuis 1994");
+  const heroTitre = val(content?.heroTitre, "Voir");
+  const heroTitreItalique = val(content?.heroTitreItalique, "au-delà");
+  const heroTitreSuite = val(content?.heroTitreSuite, "des portes du visible.");
+  const heroDescription = val(
+    content?.heroDescription,
+    "Trente ans de pratique. Quatre méthodes combinées. Une heure de consultation pour des informations concrètes, pas des prédictions floues."
+  );
+  const heroCta1 = val(content?.heroCta1, "Réserver une consultation");
+  const heroCta2 = val(content?.heroCta2, "Mon parcours");
+
+  const introSurtitre = val(content?.introSurtitre, "Qui je suis");
+  const introTitre = val(content?.introTitre, "Je m'appelle Jocelyn.");
+  const introTitreItalique = val(content?.introTitreItalique, "Médium depuis 1994.");
+  const introDescription = val(
+    content?.introDescription,
+    "Je vous reçois à Saint-Clotilde, à La Réunion. Je vous accompagne aussi par téléphone et en visio, où que vous soyez dans l'Océan Indien. En une heure, je combine quatre approches : clairvoyance, clairaudience, tirage de cartes, et voyance sur photo ou document."
+  );
+  const introStatValeur = (i: number, fallback: string) =>
+    val(content?.introStats?.[i]?.valeur, fallback);
+  const introStatLabel = (i: number, fallback: string) =>
+    val(content?.introStats?.[i]?.label, fallback);
+
+
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroLayerRef = useRef<HTMLDivElement>(null);
@@ -440,7 +487,7 @@ export function HeroParallax() {
                   "0 6px 24px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)",
               }}
             >
-              Médium voyant · La Réunion · 1994
+              {heroBadge}
             </span>
             {/* Espaceurs invisibles pour aligner verticalement avec heroLayer mobile */}
             <h2
@@ -477,7 +524,7 @@ export function HeroParallax() {
                     "0 6px 24px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)",
                 }}
               >
-                Médium voyant · La Réunion · Depuis 1994
+                {heroBadge}
               </span>
               {/* Espaceurs invisibles pour aligner verticalement avec heroLayer */}
               <h2
@@ -532,10 +579,11 @@ export function HeroParallax() {
                   "0 3px 18px rgba(0,0,0,0.95), 0 0 32px rgba(0,0,0,0.8), 0 0 64px rgba(0,0,0,0.5)",
               }}
             >
-              Au-delà des{" "}
+              {val(content?.heroTitre, "Au-delà des")}{" "}
               <span className="italic font-light text-or-clair underline decoration-or-clair/70 decoration-1 underline-offset-[6px]">
-                portes du visible.
+                {val(content?.heroTitreItalique, "portes du visible.")}
               </span>
+              {val(content?.heroTitreSuite, "").trim().length > 0 ? <>{" "}{content?.heroTitreSuite}</> : null}
             </h2>
 
             <p
@@ -545,7 +593,7 @@ export function HeroParallax() {
                   "0 2px 16px rgba(0,0,0,0.95), 0 0 28px rgba(0,0,0,0.7)",
               }}
             >
-              Médium voyant à La Réunion depuis plus de 30 ans, au cabinet ou à distance.
+              {val(content?.heroDescription, "Médium voyant à La Réunion depuis plus de 30 ans, au cabinet ou à distance.")}
             </p>
 
             <div className="flex flex-col gap-3 px-2">
@@ -553,13 +601,13 @@ export function HeroParallax() {
                 href="/reserver"
                 className="inline-flex items-center justify-center w-full h-12 px-6 rounded-full bg-or-doux text-encre font-medium text-sm tracking-wide hover:bg-or-clair transition-all duration-300"
               >
-                Réserver une consultation
+                {heroCta1}
               </Link>
               <Link
                 href="/a-propos"
                 className="inline-flex items-center justify-center w-full h-12 px-6 rounded-full border border-white/30 text-ivoire bg-white/10 backdrop-blur-xl font-medium text-sm tracking-wide shadow-[0_8px_32px_-8px_rgba(0,0,0,0.6)] transition-all duration-300"
               >
-                Découvrir mon parcours
+                {val(content?.heroCta2, "Découvrir mon parcours")}
               </Link>
             </div>
           </div>
@@ -584,11 +632,11 @@ export function HeroParallax() {
                     "0 4px 32px rgba(0,0,0,1), 0 2px 12px rgba(0,0,0,0.9), 0 0 60px rgba(0,0,0,0.6)",
                 }}
               >
-                Voir{" "}
+                {heroTitre}{" "}
                 <span className="italic font-light text-or-clair">
-                  au-delà
+                  {heroTitreItalique}
                 </span>{" "}
-                des portes du visible.
+                {heroTitreSuite}
               </h2>
 
               <p
@@ -598,9 +646,7 @@ export function HeroParallax() {
                     "0 2px 16px rgba(0,0,0,1), 0 0 30px rgba(0,0,0,0.7), 0 0 60px rgba(0,0,0,0.4)",
                 }}
               >
-                Trente ans de pratique. Quatre méthodes combinées.
-                Une heure de consultation pour des informations concrètes,
-                pas des prédictions floues.
+                {heroDescription}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
@@ -608,13 +654,13 @@ export function HeroParallax() {
                   href="/reserver"
                   className="inline-flex items-center justify-center h-14 px-8 rounded-full bg-or-doux text-encre font-medium text-base tracking-wide hover:bg-or-clair hover:shadow-lg hover:shadow-or-doux/30 transition-all duration-300"
                 >
-                  Réserver une consultation
+                  {heroCta1}
                 </Link>
                 <Link
                   href="/a-propos"
                   className="inline-flex items-center justify-center h-14 px-8 rounded-full border border-or-doux/40 text-ivoire bg-encre/30 backdrop-blur-md font-medium text-base tracking-wide hover:bg-encre/50 hover:border-or-doux/70 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)] transition-all duration-300"
                 >
-                  Mon parcours
+                  {heroCta2}
                 </Link>
               </div>
             </div>
@@ -707,37 +753,41 @@ export function HeroParallax() {
                   className="text-or-clair font-sans text-[10px] tracking-[0.45em] uppercase"
                   style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
                 >
-                  Qui je suis
+                  {introSurtitre}
                 </p>
               </div>
               <h3
                 className="relative font-serif text-[1.65rem] leading-[1.1] text-ivoire mb-4"
                 style={{ textShadow: "0 2px 14px rgba(0,0,0,0.55)" }}
               >
-                Je m&apos;appelle Jocelyn.
+                {val(content?.introTitre, "Je m'appelle Jocelyn.")}
                 <br />
                 <span className="italic text-or-clair">
-                  Médium depuis{" "}
-                  <span className="not-italic font-sans font-medium tracking-tight">
-                    1994
-                  </span>
-                  .
+                  {content?.introTitreItalique && content.introTitreItalique.trim().length > 0 ? (
+                    content.introTitreItalique
+                  ) : (
+                    <>
+                      Médium depuis{" "}
+                      <span className="not-italic font-sans font-medium tracking-tight">
+                        1994
+                      </span>
+                      .
+                    </>
+                  )}
                 </span>
               </h3>
               <p
                 className="relative font-sans text-ivoire text-[13.5px] leading-relaxed mb-5 px-1"
                 style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}
               >
-                Je vous reçois à Saint-Clotilde. Je vous accompagne aussi par
-                téléphone et en visio. En une heure, je combine clairvoyance,
-                clairaudience, tirage de cartes et voyance sur photo.
+                {val(content?.introDescription, "Je vous reçois à Saint-Clotilde. Je vous accompagne aussi par téléphone et en visio. En une heure, je combine clairvoyance, clairaudience, tirage de cartes et voyance sur photo.")}
               </p>
 
               <div className="relative grid grid-cols-4 gap-2 pt-4 border-t border-or-doux/30">
-                <StatMobile number="30+" label="Ans" />
-                <StatMobile number="4" label="Méthodes" />
-                <StatMobile number="1h" label="Séance" />
-                <StatMobile number="15ans" label="de TV" />
+                <StatMobile number={introStatValeur(0, "30+")} label={introStatLabel(0, "Ans")} />
+                <StatMobile number={introStatValeur(1, "4")} label={introStatLabel(1, "Méthodes")} />
+                <StatMobile number={introStatValeur(2, "1h")} label={introStatLabel(2, "Séance")} />
+                <StatMobile number={introStatValeur(3, "15ans")} label={introStatLabel(3, "de TV")} />
               </div>
             </div>
           </div>
@@ -850,38 +900,40 @@ export function HeroParallax() {
                     className="text-or-clair font-sans text-xs tracking-[0.45em] uppercase mb-4"
                     style={{ textShadow: "0 2px 10px rgba(0,0,0,0.7)" }}
                   >
-                    Qui je suis
+                    {introSurtitre}
                   </p>
                   <h3
                     className="font-serif text-3xl lg:text-4xl xl:text-5xl text-ivoire leading-[1.08] mb-5 lg:mb-6"
                     style={{ textShadow: "0 3px 20px rgba(0,0,0,0.65), 0 1px 4px rgba(0,0,0,0.5)" }}
                   >
-                    Je m&apos;appelle Jocelyn.
+                    {introTitre}
                     <br />
                     <span className="italic text-or-clair">
-                      Médium depuis{" "}
-                      <span className="not-italic font-sans font-medium tracking-tight">
-                        1994
-                      </span>
-                      .
+                      {content?.introTitreItalique && content.introTitreItalique.trim().length > 0 ? (
+                        content.introTitreItalique
+                      ) : (
+                        <>
+                          Médium depuis{" "}
+                          <span className="not-italic font-sans font-medium tracking-tight">
+                            1994
+                          </span>
+                          .
+                        </>
+                      )}
                     </span>
                   </h3>
                   <p
                     className="font-sans text-ivoire text-[15px] lg:text-base leading-relaxed max-w-xl"
                     style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}
                   >
-                    Je vous reçois à Saint-Clotilde, à La Réunion. Je vous
-                    accompagne aussi par téléphone et en visio, où que vous
-                    soyez dans l&apos;Océan Indien. En une heure, je combine
-                    quatre approches : clairvoyance, clairaudience, tirage de
-                    cartes, et voyance sur photo ou document.
+                    {introDescription}
                   </p>
 
                   <div className="grid grid-cols-4 gap-4 lg:gap-5 mt-8 lg:mt-9 pt-6 lg:pt-7 border-t border-or-doux/30 max-w-2xl">
-                    <StatDesktop number="30+" label="Années" />
-                    <StatDesktop number="4" label="Méthodes" />
-                    <StatDesktop number="1h" label="Par séance" />
-                    <StatDesktop number="15ans" label="de TV" />
+                    <StatDesktop number={introStatValeur(0, "30+")} label={introStatLabel(0, "Années")} />
+                    <StatDesktop number={introStatValeur(1, "4")} label={introStatLabel(1, "Méthodes")} />
+                    <StatDesktop number={introStatValeur(2, "1h")} label={introStatLabel(2, "Par séance")} />
+                    <StatDesktop number={introStatValeur(3, "15ans")} label={introStatLabel(3, "de TV")} />
                   </div>
                 </div>
               </div>

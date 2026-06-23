@@ -1,0 +1,118 @@
+import {defineType, defineField} from 'sanity'
+
+export default defineType({
+  name: 'pageContact',
+  title: 'Page Contact',
+  type: 'document',
+  groups: [
+    {name: 'entete', title: 'En-tete'},
+    {name: 'reservation', title: 'Reservation rapide'},
+    {name: 'coordonnees', title: 'Coordonnees'},
+    {name: 'confidentialite', title: 'Confidentialite'},
+  ],
+  fields: [
+    defineField({
+      name: 'enteteSurtitre',
+      title: "Surtitre de l'en-tete",
+      type: 'string',
+      group: 'entete',
+      initialValue: 'Contact',
+    }),
+    defineField({
+      name: 'enteteTitre',
+      title: "Titre de l'en-tete",
+      type: 'string',
+      group: 'entete',
+      initialValue: 'Ecrivez a Jocelyn.',
+    }),
+    defineField({
+      name: 'enteteTitreItalique',
+      title: 'Titre en italique',
+      type: 'string',
+      group: 'entete',
+      initialValue: '',
+    }),
+    defineField({
+      name: 'enteteDescription',
+      title: "Court resume de l'en-tete",
+      type: 'text',
+      rows: 2,
+      group: 'entete',
+      initialValue:
+        'Une question avant de reserver ? Reponse sous 24h. La reservation, elle, se fait en ligne.',
+    }),
+    defineField({
+      name: 'reservationSurtitre',
+      title: 'Surtitre (reservation rapide)',
+      type: 'string',
+      group: 'reservation',
+      initialValue: 'Reserver maintenant',
+    }),
+    defineField({
+      name: 'reservationTitre',
+      title: 'Titre (reservation rapide)',
+      type: 'string',
+      group: 'reservation',
+      initialValue: 'Choisissez votre formule.',
+    }),
+    defineField({
+      name: 'reservationOption1',
+      title: 'Option 1',
+      type: 'string',
+      group: 'reservation',
+      initialValue: 'Une heure, cabinet ou a distance, 120 euros',
+    }),
+    defineField({
+      name: 'reservationOption2',
+      title: 'Option 2',
+      type: 'string',
+      group: 'reservation',
+      initialValue: '30 min, par telephone, 85 euros',
+    }),
+    defineField({
+      name: 'coordEmail',
+      title: 'Adresse email',
+      type: 'string',
+      group: 'coordonnees',
+      initialValue: 'contact@jocelynamir.com',
+    }),
+    defineField({
+      name: 'coordTelephone',
+      title: 'Telephone',
+      type: 'string',
+      group: 'coordonnees',
+      initialValue: '+262 692 81 36 06',
+    }),
+    defineField({
+      name: 'coordVille',
+      title: 'Ville',
+      type: 'string',
+      group: 'coordonnees',
+      initialValue: 'Saint-Clotilde',
+    }),
+    defineField({
+      name: 'coordRegion',
+      title: 'Region',
+      type: 'string',
+      group: 'coordonnees',
+      initialValue: 'La Reunion (974)',
+    }),
+    defineField({
+      name: 'confidentialiteTitre',
+      title: 'Titre (confidentialite)',
+      type: 'string',
+      group: 'confidentialite',
+      initialValue: 'Confidentialite garantie.',
+    }),
+    defineField({
+      name: 'confidentialiteTexte',
+      title: 'Texte (confidentialite)',
+      type: 'text',
+      rows: 2,
+      group: 'confidentialite',
+      initialValue:
+        "Tout ce que vous partagez reste strictement entre nous. Aucune information n'est transmise a un tiers.",
+    }),
+  ],
+  preview: {prepare: () => ({title: 'Page Contact'})},
+})

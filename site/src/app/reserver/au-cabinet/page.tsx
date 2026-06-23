@@ -3,8 +3,16 @@ import { ChevronLeft, Check, MapPin } from "lucide-react";
 import { Footer } from "@/components/sections/Footer";
 import { PaymentButton } from "@/components/reservation/PaymentButton";
 import { DelaiBanner } from "@/components/reservation/DelaiBanner";
+import { safeFetch, pick } from "@/lib/sanity";
+import { getPageGlobale } from "@/lib/global-content";
 
 const ACCENT = "#C9A961";
+
+// Contenu editorial (singleton "pageReserverCabinet"). Repli sur les textes
+// en dur via pick si Sanity est vide ou hors-ligne.
+const CABINET_QUERY = `*[_id == "pageReserverCabinet"][0]{
+  surtitre, titre, descriptionPaiement, labelFormule, detailFormule, features[], prix
+}`;
 
 export const metadata = {
   title: "Réserver une heure · Jocelyn Amir",
@@ -12,7 +20,17 @@ export const metadata = {
     "Réservez votre consultation d'une heure avec Jocelyn Amir : au cabinet à Saint-Clotilde ou à distance, au même tarif. Quatre méthodes combinées. 120€.",
 };
 
-export default function AuCabinetPage() {
+export default async function AuCabinetPage() {
+  const p = await safeFetch<Record<string, unknown> | null>(CABINET_QUERY, null);
+  const global = await getPageGlobale();
+  const prix = typeof p?.prix === "number" ? (p.prix as number) : 120;
+  const features = (p?.features as string[] | undefined) ?? [];
+  const featuresList = features.length > 0 ? features : [
+    "Quatre méthodes combinées en une seule séance",
+    "Au cabinet à Saint-Clotilde ou à distance",
+    "Photos, courriers ou objets bienvenus",
+    "Récap oral à la fin de la séance",
+  ];
   return (
     <main className="bg-ivoire">
       {/* On arrive directement sur l'étape de paiement (pas de grande intro) */}
@@ -36,13 +54,13 @@ export default function AuCabinetPage() {
           >
             <div aria-hidden className="h-1 rounded-full mb-7" style={{ background: `linear-gradient(90deg, transparent, ${ACCENT}, transparent)` }} />
             <p className="font-sans text-[10.5px] tracking-[0.3em] uppercase mb-2" style={{ color: ACCENT }}>
-              Réservation · Une heure
+              {pick(p?.surtitre, "Réservation · Une heure")}
             </p>
             <h1 className="font-serif text-2xl md:text-3xl text-encre leading-tight mb-2">
-              Confirmez et réglez votre séance
+              {pick(p?.titre, "Confirmez et réglez votre séance")}
             </h1>
             <p className="font-sans text-encre/60 text-sm mb-7">
-              Le paiement sécurisé valide définitivement votre rendez-vous. Vous indiquez vos coordonnées au moment du règlement et précisez si la séance a lieu au cabinet ou à distance.
+              {pick(p?.descriptionPaiement, "Le paiement sécurisé valide définitivement votre rendez-vous. Vous indiquez vos coordonnées au moment du règlement et précisez si la séance a lieu au cabinet ou à distance.")}
             </p>
 
             {/* Récap formule, juste au-dessus du bouton */}
@@ -55,17 +73,17 @@ export default function AuCabinetPage() {
                   Formule sélectionnée
                 </p>
                 <p className="font-serif text-encre text-lg">
-                  Une heure{" "}
-                  <span className="font-sans text-encre/55 text-sm ml-1">(cabinet ou à distance)</span>
+                  {pick(p?.labelFormule, "Une heure")}{" "}
+                  <span className="font-sans text-encre/55 text-sm ml-1">{pick(p?.detailFormule, "(cabinet ou à distance)")}</span>
                 </p>
               </div>
               <div className="flex items-baseline gap-1 shrink-0">
-                <span className="font-sans font-semibold text-3xl tabular-nums leading-none" style={{ color: ACCENT }}>120</span>
+                <span className="font-sans font-semibold text-3xl tabular-nums leading-none" style={{ color: ACCENT }}>{prix}</span>
                 <span className="font-sans text-base text-encre/65">€</span>
               </div>
             </div>
 
-            <PaymentButton formuleSlug="au-cabinet" priceEur={120} accentHex={ACCENT} />
+            <PaymentButton formuleSlug="au-cabinet" priceEur={prix} accentHex={ACCENT} />
           </div>
 
           {/* Récapitulatif du service, en dessous */}
@@ -82,22 +100,17 @@ export default function AuCabinetPage() {
                 </div>
                 <div className="min-w-0">
                   <p className="font-sans text-[9px] tracking-[0.16em] sm:text-[10px] sm:tracking-[0.3em] uppercase text-or-clair mb-0.5">Au cabinet ou à distance</p>
-                  <h2 className="font-serif text-xl sm:text-2xl text-ivoire leading-tight whitespace-nowrap">Une heure</h2>
+                  <h2 className="font-serif text-xl sm:text-2xl text-ivoire leading-tight whitespace-nowrap">{pick(p?.labelFormule, "Une heure")}</h2>
                 </div>
               </div>
               <div className="flex items-baseline gap-1 shrink-0">
-                <span className="font-sans font-semibold text-3xl sm:text-4xl text-or-clair leading-none tabular-nums">120</span>
+                <span className="font-sans font-semibold text-3xl sm:text-4xl text-or-clair leading-none tabular-nums">{prix}</span>
                 <span className="font-sans text-lg sm:text-xl text-or-doux/80">€</span>
               </div>
             </div>
 
             <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-[13px] text-ivoire/90">
-              {[
-                "Quatre méthodes combinées en une seule séance",
-                "Au cabinet à Saint-Clotilde ou à distance",
-                "Photos, courriers ou objets bienvenus",
-                "Récap oral à la fin de la séance",
-              ].map((item) => (
+              {featuresList.map((item) => (
                 <li key={item} className="flex gap-2.5 items-start">
                   <span className="relative shrink-0 mt-1 w-3.5 h-3.5">
                     <span aria-hidden className="absolute inset-0 rounded-full bg-or-doux/15" />
@@ -113,7 +126,7 @@ export default function AuCabinetPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer content={global.footer} />
     </main>
   );
 }

@@ -1,6 +1,21 @@
 import { Seuil } from "@/components/sections/Seuil";
 import { Footer } from "@/components/sections/Footer";
 import { ArrowRight, Calendar } from "lucide-react";
+import { safeFetch, pick } from "@/lib/sanity";
+import { getPageGlobale } from "@/lib/global-content";
+
+// Contenu editorial (singleton "pageMedias"). Repli sur les textes en dur via
+// pick / arrays par defaut si Sanity est vide ou hors-ligne.
+const MEDIAS_QUERY = `*[_id == "pageMedias"][0]{
+  surtitre, titre, titreItalique,
+  medias[]{label, nom, description, frequence, lieu},
+  nationaleSurtitre, nationaleTitre, nationaleTitreItalique, nationaleDescription,
+  distinctions[]{annee, label, lieu},
+  labelCta1, labelCta2
+}`;
+
+type Media = { label?: string; nom?: string; description?: string; frequence?: string; lieu?: string };
+type Distinction = { annee?: string; label?: string; lieu?: string };
 
 export const metadata = {
   title: "Médias & Presse · Jocelyn Amir",
@@ -8,7 +23,10 @@ export const metadata = {
     "Trente ans de présence médiatique. Télé Kréol, Kréol FM, distinctions nationales et présence à La Réunion depuis 2010.",
 };
 
-const DISTINCTIONS = [
+// Defauts en dur. Le champ `side` (position au-dessus/en-dessous de la timeline)
+// reste non editorial : il est conserve par index meme si Sanity fournit les
+// distinctions. Seuls year/label/lieu sont editables.
+const DISTINCTIONS_DEFAUT = [
   { year: "1994", label: "Prix de la presse et des médias", lieu: "Marseille", side: "bottom" },
   { year: "1996", label: "Prix du public du meilleur voyant", lieu: "Grenoble", side: "top" },
   { year: "1997", label: "Prix du meilleur voyant médium", lieu: "Créteil", side: "bottom" },
@@ -16,7 +34,26 @@ const DISTINCTIONS = [
   { year: "2001", label: "2e Festival de Cannes", lieu: "Cannes", side: "bottom" },
 ];
 
-export default function MediasPressePage() {
+export default async function MediasPressePage() {
+  const p = await safeFetch<Record<string, unknown> | null>(MEDIAS_QUERY, null);
+  const global = await getPageGlobale();
+
+  const sanityMedias = (p?.medias as Media[] | undefined) ?? [];
+  const m0 = sanityMedias[0] ?? {};
+  const m1 = sanityMedias[1] ?? {};
+
+  const sanityDist = (p?.distinctions as Distinction[] | undefined) ?? [];
+  // On garde le `side` par index (mise en page non editoriale). Si Sanity
+  // fournit plus d'entrees que de defauts, on alterne top/bottom.
+  const DISTINCTIONS = (sanityDist.length > 0
+    ? sanityDist.map((d, i) => ({
+        year: pick(d.annee, DISTINCTIONS_DEFAUT[i]?.year ?? ""),
+        label: pick(d.label, DISTINCTIONS_DEFAUT[i]?.label ?? ""),
+        lieu: pick(d.lieu, DISTINCTIONS_DEFAUT[i]?.lieu ?? ""),
+        side: DISTINCTIONS_DEFAUT[i]?.side ?? (i % 2 === 0 ? "bottom" : "top"),
+      }))
+    : DISTINCTIONS_DEFAUT);
+
   return (
     <main className="bg-ivoire">
 
@@ -34,11 +71,11 @@ export default function MediasPressePage() {
         <div className="relative max-w-6xl mx-auto px-6 md:px-12 pb-12">
           <div className="flex items-center gap-3 mb-3">
             <span className="h-px w-8 bg-or-doux/50" />
-            <p className="font-sans text-or-clair text-[9px] tracking-[0.6em] uppercase">Agenda permanent</p>
+            <p className="font-sans text-or-clair text-[9px] tracking-[0.6em] uppercase">{pick(p?.surtitre, "Agenda permanent")}</p>
           </div>
           <h2 className="font-serif text-3xl md:text-4xl text-ivoire leading-tight tracking-tight">
-            Présence médiatique
-            <span className="italic text-or-clair"> régulière.</span>
+            {pick(p?.titre, "Présence médiatique")}
+            <span className="italic text-or-clair"> {pick(p?.titreItalique, "régulière.")}</span>
           </h2>
         </div>
 
@@ -50,18 +87,18 @@ export default function MediasPressePage() {
             <div className="flex items-center gap-5">
               <img src="/images/logo-tele-kreol.jpg" alt="Télé Kréol" className="h-12 w-auto object-contain shrink-0" style={{ mixBlendMode: "lighten" }} />
               <div>
-                <p className="font-sans text-or-clair text-[10px] tracking-[0.32em] uppercase mb-1">Télévision</p>
-                <p className="font-serif text-ivoire text-3xl leading-none">Télé Kréol</p>
+                <p className="font-sans text-or-clair text-[10px] tracking-[0.32em] uppercase mb-1">{pick(m0.label, "Télévision")}</p>
+                <p className="font-serif text-ivoire text-3xl leading-none">{pick(m0.nom, "Télé Kréol")}</p>
               </div>
             </div>
 
             <p className="font-sans text-ivoire/60 text-sm leading-relaxed max-w-md">
-              En direct depuis 2010, Jocelyn répond aux questions des téléspectateurs réunionnais sur la médiumnité et la voyance.
+              {pick(m0.description, "En direct depuis 2010, Jocelyn répond aux questions des téléspectateurs réunionnais sur la médiumnité et la voyance.")}
             </p>
 
             <div className="md:text-right md:border-l md:border-ivoire/10 md:pl-10">
-              <p className="font-serif italic text-or-clair text-lg leading-tight">Chaque mercredi</p>
-              <p className="font-sans text-ivoire/55 text-sm tabular-nums mt-0.5">19h30, La Réunion</p>
+              <p className="font-serif italic text-or-clair text-lg leading-tight">{pick(m0.frequence, "Chaque mercredi")}</p>
+              <p className="font-sans text-ivoire/55 text-sm tabular-nums mt-0.5">{pick(m0.lieu, "19h30, La Réunion")}</p>
             </div>
           </div>
 
@@ -70,18 +107,18 @@ export default function MediasPressePage() {
             <div className="flex items-center gap-5">
               <img src="/images/logo-kreol-fm.jpg" alt="Kréol FM" className="h-12 w-auto object-contain shrink-0" style={{ mixBlendMode: "lighten" }} />
               <div>
-                <p className="font-sans text-[10px] tracking-[0.32em] uppercase mb-1" style={{ color: "#7DD3E8" }}>Radio</p>
-                <p className="font-serif text-ivoire text-3xl leading-none">Kréol FM</p>
+                <p className="font-sans text-[10px] tracking-[0.32em] uppercase mb-1" style={{ color: "#7DD3E8" }}>{pick(m1.label, "Radio")}</p>
+                <p className="font-serif text-ivoire text-3xl leading-none">{pick(m1.nom, "Kréol FM")}</p>
               </div>
             </div>
 
             <p className="font-sans text-ivoire/60 text-sm leading-relaxed max-w-md">
-              Des émissions consacrées à la spiritualité, aux traditions réunionnaises et à la voyance.
+              {pick(m1.description, "Des émissions consacrées à la spiritualité, aux traditions réunionnaises et à la voyance.")}
             </p>
 
             <div className="md:text-right md:border-l md:border-ivoire/10 md:pl-10">
-              <p className="font-serif italic text-lg leading-tight" style={{ color: "#7DD3E8" }}>Interventions régulières</p>
-              <p className="font-sans text-ivoire/55 text-sm mt-0.5">La Réunion</p>
+              <p className="font-serif italic text-lg leading-tight" style={{ color: "#7DD3E8" }}>{pick(m1.frequence, "Interventions régulières")}</p>
+              <p className="font-sans text-ivoire/55 text-sm mt-0.5">{pick(m1.lieu, "La Réunion")}</p>
             </div>
           </div>
         </div>
@@ -94,13 +131,13 @@ export default function MediasPressePage() {
         <div className="max-w-6xl mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <p className="font-sans text-xs tracking-[0.45em] uppercase text-encre/40 mb-3">Présence nationale</p>
+              <p className="font-sans text-xs tracking-[0.45em] uppercase text-encre/40 mb-3">{pick(p?.nationaleSurtitre, "Présence nationale")}</p>
               <h2 className="font-serif text-3xl md:text-4xl text-encre leading-tight mb-4">
-                Du Festival de Cannes{" "}
-                <span className="italic text-bleu-majorelle">aux plateaux télé.</span>
+                {pick(p?.nationaleTitre, "Du Festival de Cannes")}{" "}
+                <span className="italic text-bleu-majorelle">{pick(p?.nationaleTitreItalique, "aux plateaux télé.")}</span>
               </h2>
               <p className="font-sans text-encre/65 text-base leading-relaxed mb-5">
-                Présent au Festival de Cannes en 2000 et 2001, une reconnaissance nationale de sa pratique. Aujourd&apos;hui, Jocelyn continue de passer régulièrement à la télévision.
+                {pick(p?.nationaleDescription, "Présent au Festival de Cannes en 2000 et 2001, une reconnaissance nationale de sa pratique. Aujourd'hui, Jocelyn continue de passer régulièrement à la télévision.")}
               </p>
               <div className="flex items-center gap-3">
                 <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-encre/40 px-3 py-1 border border-encre/15 rounded-full">2000</span>
@@ -217,20 +254,20 @@ export default function MediasPressePage() {
 
           <div className="mt-14 flex flex-col sm:flex-row gap-3">
             <a href="/a-propos" className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-sans text-xs tracking-[0.22em] uppercase font-medium bg-or-doux text-encre hover:bg-or-clair transition-colors">
-              <span>Mon parcours complet</span>
+              <span>{pick(p?.labelCta1, "Mon parcours complet")}</span>
               <ArrowRight size={13} strokeWidth={2} />
             </a>
             <a href="/reserver" className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-sans text-xs tracking-[0.22em] uppercase border border-ivoire/35 text-ivoire hover:border-or-doux/70 transition-colors">
               <Calendar size={13} strokeWidth={2} />
-              <span>Réserver</span>
+              <span>{pick(p?.labelCta2, "Réserver")}</span>
             </a>
           </div>
         </div>
         <div aria-hidden className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-or-doux to-transparent opacity-40" />
       </section>
 
-      <Seuil />
-      <Footer />
+      <Seuil content={global.seuil} />
+      <Footer content={global.footer} />
     </main>
   );
 }

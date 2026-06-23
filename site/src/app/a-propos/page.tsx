@@ -1,13 +1,37 @@
 import Image from "next/image";
 import { Seuil } from "@/components/sections/Seuil";
 import { Footer } from "@/components/sections/Footer";
-import { Heart, Users, Target, Brain } from "lucide-react";
+import { Users, Target, Brain } from "lucide-react";
+import { safeFetch } from "@/lib/sanity";
+import { getPageGlobale } from "@/lib/global-content";
 
 export const metadata = {
   title: "À propos · Jocelyn Amir, médium voyant & coach à La Réunion",
   description:
     "Plus jeune médium de France à 23 ans. Trente ans de carrière médiatique entre Marseille, Paris, Cannes et La Réunion.",
 };
+
+// Defauts en dur : le site ne se vide jamais. Seuls les textes sont editables ;
+// icones, couleurs d'accent et image de portrait restent cote code.
+const FRISE = [
+  { year: "1994", label: "Début · Prix presse à Marseille" },
+  { year: "1996", label: "Prix meilleur voyant · Grenoble" },
+  { year: "1997", label: "Prix meilleur voyant médium · Créteil" },
+  { year: "2000", label: "Festival de Cannes · deux éditions" },
+  { year: "2010+", label: "Émission hebdo · Télé Kréol" },
+  { year: "Aujourd'hui", label: "Médium & coach · Saint-Clotilde" },
+];
+
+const BIO_PARAGRAPHES = [
+  "À 23 ans, prix de la presse et des médias à Marseille, plus jeune médium de France. Prix du meilleur voyant à Grenoble (1996), Prix du meilleur voyant médium à Créteil (1997), Festival de Cannes en 2000 et 2001.",
+  "Montmartre, le Maroc, et finalement La Réunion. Trois mois après mon installation, les médias locaux m'ont contacté. Depuis : une émission hebdomadaire sur Télé Kréol et Kréol FM, chaque mercredi à 19h30, depuis quinze ans.",
+];
+
+const CROYANCES = [
+  { titre: "Précision", texte: "Des éléments vérifiables, pas des banalités." },
+  { titre: "Honnêteté", texte: "Je dis ce que je vois. Ni plus, ni moins." },
+  { titre: "Liberté", texte: "Rien n'est figé. Vos choix restent les vôtres." },
+];
 
 const COACHING_PILLIERS = [
   {
@@ -30,7 +54,51 @@ const COACHING_PILLIERS = [
   },
 ];
 
-export default function AProposPage() {
+function val(value: unknown, fallback: string): string {
+  return typeof value === "string" && value.trim().length > 0 ? value : fallback;
+}
+
+// Contenu editorial de la page A propos, edite depuis le Studio Sanity
+// (singleton "pageAPropos"). safeFetch renvoie null si Sanity est hors-ligne :
+// chaque champ applique alors son repli sur le texte d'origine en dur.
+// bioParagraphes et certains coachingPiliers.texte sont vides cote Sanity :
+// le repli conserve les paragraphes d'origine.
+const APROPOS_QUERY = `*[_id == "pageAPropos"][0]{
+  frise, bioParagraphes, bioCitation, croyancesTitre,
+  croyances[]{titre, texte},
+  coachingSurtitre, coachingTitre, coachingTitreItalique, coachingDescription, coachingLabelCta,
+  coachingPiliers[]{titre, texte}
+}`;
+
+export default async function AProposPage() {
+  const data = await safeFetch<Record<string, unknown> | null>(APROPOS_QUERY, null);
+  const global = await getPageGlobale();
+
+  const friseSanity = data?.frise as { year?: string; label?: string }[] | undefined;
+  const frise = FRISE.map((f, i) => ({
+    year: val(friseSanity?.[i]?.year, f.year),
+    label: val(friseSanity?.[i]?.label, f.label),
+  }));
+
+  const bioSanity = data?.bioParagraphes as string[] | undefined;
+  const bioParagraphes =
+    Array.isArray(bioSanity) && bioSanity.filter((x) => typeof x === "string" && x.trim().length > 0).length > 0
+      ? bioSanity
+      : BIO_PARAGRAPHES;
+
+  const croyancesSanity = data?.croyances as { titre?: string; texte?: string }[] | undefined;
+  const croyances = CROYANCES.map((c, i) => ({
+    titre: val(croyancesSanity?.[i]?.titre, c.titre),
+    texte: val(croyancesSanity?.[i]?.texte, c.texte),
+  }));
+
+  const piliersSanity = data?.coachingPiliers as { titre?: string; texte?: string }[] | undefined;
+  const piliers = COACHING_PILLIERS.map((p, i) => ({
+    ...p,
+    titre: val(piliersSanity?.[i]?.titre, p.titre),
+    texte: val(piliersSanity?.[i]?.texte, p.texte),
+  }));
+
   return (
     <main className="bg-ivoire">
 
@@ -56,14 +124,7 @@ export default function AProposPage() {
               </div>
 
               <div className="mt-8 space-y-2.5">
-                {[
-                  { year: "1994", label: "Début · Prix presse à Marseille" },
-                  { year: "1996", label: "Prix meilleur voyant · Grenoble" },
-                  { year: "1997", label: "Prix meilleur voyant médium · Créteil" },
-                  { year: "2000", label: "Festival de Cannes · deux éditions" },
-                  { year: "2010+", label: "Émission hebdo · Télé Kréol" },
-                  { year: "Aujourd'hui", label: "Médium & coach · Saint-Clotilde" },
-                ].map(({ year, label }) => (
+                {frise.map(({ year, label }) => (
                   <div key={year} className="flex gap-3 items-start">
                     <span className="shrink-0 font-sans font-medium text-[10px] tracking-wide text-or-doux w-16 pt-0.5">{year}</span>
                     <span className="font-sans text-encre/60 text-[12px] leading-snug">{label}</span>
@@ -77,24 +138,17 @@ export default function AProposPage() {
               <p className="font-serif text-xl md:text-2xl italic text-bleu-majorelle leading-tight">
                 Ma carrière médiatique a débuté en <span className="not-italic font-sans font-medium">1994</span>.
               </p>
-              <p>
-                À 23 ans, prix de la presse et des médias à Marseille, plus jeune médium de France. Prix du meilleur voyant à Grenoble (1996), Prix du meilleur voyant médium à Créteil (1997), Festival de Cannes en 2000 et 2001.
-              </p>
-              <p>
-                Montmartre, le Maroc, et finalement La Réunion. Trois mois après mon installation, les médias locaux m&apos;ont contacté. Depuis : une émission hebdomadaire sur Télé Kréol et Kréol FM, chaque mercredi à 19h30, depuis quinze ans.
-              </p>
+              {bioParagraphes.map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
               <p className="font-serif italic text-lg text-encre">
-                «&nbsp;On n&apos;échappe pas à son destin médiatique.&nbsp;»
+                «&nbsp;{val(data?.bioCitation, "On n'échappe pas à son destin médiatique.")}&nbsp;»
               </p>
 
               <div className="pt-4 border-t border-encre/10">
-                <p className="font-sans text-xs tracking-[0.4em] uppercase text-bleu-majorelle mb-4">Ce en quoi je crois</p>
+                <p className="font-sans text-xs tracking-[0.4em] uppercase text-bleu-majorelle mb-4">{val(data?.croyancesTitre, "Ce en quoi je crois")}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {[
-                    { titre: "Précision", texte: "Des éléments vérifiables, pas des banalités." },
-                    { titre: "Honnêteté", texte: "Je dis ce que je vois. Ni plus, ni moins." },
-                    { titre: "Liberté", texte: "Rien n'est figé. Vos choix restent les vôtres." },
-                  ].map(({ titre, texte }) => (
+                  {croyances.map(({ titre, texte }) => (
                     <div key={titre} className="p-4 bg-sable/30 rounded-xl">
                       <p className="font-serif text-base text-encre mb-1">{titre}</p>
                       <p className="font-sans text-encre/55 text-xs leading-relaxed">{texte}</p>
@@ -115,25 +169,25 @@ export default function AProposPage() {
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
 
             <div>
-              <p className="font-sans text-xs tracking-[0.45em] uppercase text-terre-cuite mb-4">Une démarche complémentaire</p>
+              <p className="font-sans text-xs tracking-[0.45em] uppercase text-terre-cuite mb-4">{val(data?.coachingSurtitre, "Une démarche complémentaire")}</p>
               <h2 className="font-serif text-3xl md:text-4xl text-encre leading-tight tracking-tight mb-5">
-                Coach de vie &amp;{" "}
-                <span className="italic text-terre-cuite">développement personnel.</span>
+                {val(data?.coachingTitre, "Coach de vie &")}{" "}
+                <span className="italic text-terre-cuite">{val(data?.coachingTitreItalique, "développement personnel.")}</span>
               </h2>
               <p className="font-sans text-encre/65 leading-relaxed text-sm md:text-base mb-6">
-                À la suite de nombreuses demandes, j&apos;ai formalisé un accompagnement que j&apos;exerçais déjà naturellement. Le coaching de vie, en complément de la voyance : confiance en soi, reconversion, relations, gestion des émotions.
+                {val(data?.coachingDescription, "À la suite de nombreuses demandes, j'ai formalisé un accompagnement que j'exerçais déjà naturellement. Le coaching de vie, en complément de la voyance : confiance en soi, reconversion, relations, gestion des émotions.")}
               </p>
               <a
                 href="/contact"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-sans text-xs tracking-[0.2em] uppercase font-medium bg-terre-cuite text-ivoire hover:opacity-90 transition-opacity"
               >
-                Nous contacter
+                {val(data?.coachingLabelCta, "Nous contacter")}
               </a>
             </div>
 
             {/* Piliers - 3 items sobres sans numérotation */}
             <div className="flex flex-col gap-0">
-              {COACHING_PILLIERS.map(({ titre, texte, accent }) => (
+              {piliers.map(({ titre, texte, accent }) => (
                 <div key={titre} className="flex items-start gap-5 py-5 border-b border-encre/8 last:border-0">
                   <div className="shrink-0 w-1 h-full min-h-[3rem] self-stretch rounded-full" style={{ background: `${accent}50` }} />
                   <div className="flex-1 min-w-0">
@@ -147,8 +201,8 @@ export default function AProposPage() {
         </div>
       </section>
 
-      <Seuil />
-      <Footer />
+      <Seuil content={global.seuil} />
+      <Footer content={global.footer} />
     </main>
   );
 }

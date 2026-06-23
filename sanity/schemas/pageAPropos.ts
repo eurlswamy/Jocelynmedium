@@ -1,0 +1,136 @@
+import {defineType, defineField, defineArrayMember} from 'sanity'
+
+export default defineType({
+  name: 'pageAPropos',
+  title: 'Page A propos',
+  type: 'document',
+  groups: [
+    {name: 'frise', title: 'Frise (parcours)'},
+    {name: 'bio', title: 'Biographie'},
+    {name: 'croyances', title: 'Ce en quoi je crois'},
+    {name: 'coaching', title: 'Coaching de vie'},
+  ],
+  fields: [
+    defineField({
+      name: 'frise',
+      title: 'Etapes du parcours',
+      description: 'Les six etapes affichees dans la frise chronologique.',
+      type: 'array',
+      group: 'frise',
+      of: [defineArrayMember({type: 'string'})],
+      initialValue: [
+        'Debut, Prix presse a Marseille',
+        'Prix meilleur voyant, Grenoble',
+        'Prix meilleur voyant medium, Creteil',
+        'Festival de Cannes, deux editions',
+        'Emission hebdo, Tele Kreol',
+        'Medium et coach, Saint-Clotilde',
+      ],
+    }),
+    defineField({
+      name: 'bioParagraphes',
+      title: 'Paragraphes de biographie',
+      description: 'Le texte de presentation, un paragraphe par bloc.',
+      type: 'array',
+      group: 'bio',
+      of: [defineArrayMember({type: 'text', rows: 4})],
+      initialValue: [],
+    }),
+    defineField({
+      name: 'bioCitation',
+      title: 'Citation',
+      type: 'text',
+      rows: 2,
+      group: 'bio',
+      initialValue: "On n'echappe pas a son destin mediatique.",
+    }),
+    defineField({
+      name: 'croyancesTitre',
+      title: 'Titre de la section',
+      type: 'string',
+      group: 'croyances',
+      initialValue: 'Ce en quoi je crois',
+    }),
+    defineField({
+      name: 'croyances',
+      title: 'Croyances',
+      description: 'Les trois valeurs affichees dans la section.',
+      type: 'array',
+      group: 'croyances',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({name: 'titre', title: 'Titre', type: 'string'}),
+            defineField({name: 'texte', title: 'Texte', type: 'text', rows: 2}),
+          ],
+          preview: {select: {title: 'titre'}},
+        }),
+      ],
+      initialValue: [
+        {titre: 'Precision', texte: 'Des elements verifiables, pas des banalites.'},
+        {titre: 'Honnetete', texte: 'Je dis ce que je vois. Ni plus, ni moins.'},
+        {titre: 'Liberte', texte: "Rien n'est fige. Vos choix restent les votres."},
+      ],
+    }),
+    defineField({
+      name: 'coachingSurtitre',
+      title: 'Surtitre (section Coaching)',
+      type: 'string',
+      group: 'coaching',
+      initialValue: 'Une demarche complementaire',
+    }),
+    defineField({
+      name: 'coachingTitre',
+      title: 'Titre (section Coaching)',
+      type: 'string',
+      group: 'coaching',
+      initialValue: 'Coach de vie et developpement personnel.',
+    }),
+    defineField({
+      name: 'coachingTitreItalique',
+      title: 'Titre en italique (section Coaching)',
+      type: 'string',
+      group: 'coaching',
+      initialValue: '',
+    }),
+    defineField({
+      name: 'coachingDescription',
+      title: 'Texte (section Coaching)',
+      type: 'text',
+      rows: 3,
+      group: 'coaching',
+      initialValue: '',
+    }),
+    defineField({
+      name: 'coachingLabelCta',
+      title: 'Texte du bouton (section Coaching)',
+      type: 'string',
+      group: 'coaching',
+      initialValue: 'Nous contacter',
+    }),
+    defineField({
+      name: 'coachingPiliers',
+      title: 'Piliers du coaching',
+      description: 'Les trois points cles du coaching.',
+      type: 'array',
+      group: 'coaching',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({name: 'titre', title: 'Titre', type: 'string'}),
+            defineField({name: 'texte', title: 'Texte', type: 'text', rows: 2}),
+          ],
+          preview: {select: {title: 'titre'}},
+        }),
+      ],
+      initialValue: [
+        {titre: 'Ecoute sans jugement', texte: ''},
+        {titre: 'Objectifs concrets', texte: ''},
+        {titre: 'Complementaire a la voyance', texte: ''},
+      ],
+    }),
+  ],
+  preview: {prepare: () => ({title: 'Page A propos'})},
+})

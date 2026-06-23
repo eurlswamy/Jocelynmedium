@@ -1,0 +1,190 @@
+import {defineType, defineField, defineArrayMember} from 'sanity'
+
+export default defineType({
+  name: 'pageReserver',
+  title: 'Page Reserver',
+  type: 'document',
+  groups: [
+    {name: 'entete', title: 'En-tete'},
+    {name: 'banniere', title: 'Banniere info'},
+    {name: 'formules', title: 'Formules'},
+    {name: 'regulieres', title: 'Seances regulieres'},
+    {name: 'autre', title: 'Autre demande'},
+    {name: 'footer', title: 'Note de bas de page'},
+  ],
+  fields: [
+    defineField({
+      name: 'surtitre',
+      title: 'Surtitre de la page',
+      type: 'string',
+      group: 'entete',
+      initialValue: 'Reservation en ligne',
+    }),
+    defineField({
+      name: 'titre',
+      title: 'Titre de la page',
+      type: 'string',
+      group: 'entete',
+      initialValue: 'Choisissez votre formule.',
+    }),
+    defineField({
+      name: 'titreItalique',
+      title: 'Titre en italique',
+      type: 'string',
+      group: 'entete',
+      initialValue: '',
+    }),
+    defineField({
+      name: 'banniereTitre',
+      title: 'Titre de la banniere info',
+      type: 'string',
+      group: 'banniere',
+      initialValue: 'La reservation se fait exclusivement en ligne.',
+    }),
+    defineField({
+      name: 'banniereTexte',
+      title: 'Texte de la banniere info',
+      type: 'text',
+      rows: 3,
+      group: 'banniere',
+      initialValue:
+        'Les messages et appels ne permettent pas de bloquer un creneau. Choisissez votre formule ci-dessous pour acceder au formulaire et au paiement securise.',
+    }),
+    defineField({
+      name: 'formules',
+      title: 'Formules detaillees',
+      description: 'Les deux formules de consultation reservables en ligne.',
+      type: 'array',
+      group: 'formules',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({name: 'surtitre', title: 'Surtitre', type: 'string'}),
+            defineField({name: 'titre', title: 'Titre', type: 'string'}),
+            defineField({name: 'description', title: 'Description', type: 'text', rows: 3}),
+            defineField({
+              name: 'features',
+              title: 'Points inclus',
+              type: 'array',
+              of: [defineArrayMember({type: 'string'})],
+            }),
+            defineField({name: 'duree', title: 'Duree', type: 'string'}),
+            defineField({name: 'prix', title: 'Prix (texte affiche)', type: 'string'}),
+            defineField({name: 'labelCta', title: 'Texte du bouton', type: 'string'}),
+          ],
+          preview: {select: {title: 'titre', subtitle: 'duree'}},
+        }),
+      ],
+      initialValue: [
+        {
+          surtitre: 'Au cabinet ou a distance',
+          titre: 'Une heure',
+          description:
+            'Une heure complete, dans mon bureau zen a Saint-Clotilde ou a distance, au meme tarif. Les quatre methodes combinees sans precipitation.',
+          features: [
+            "Consultation d'une heure pleine, au cabinet ou a distance",
+            'Quatre methodes combinees en une seance',
+            'Photos, courriers ou objets bienvenus',
+            'Recap oral a la fin de la seance',
+          ],
+          duree: '1 heure',
+          prix: '120',
+          labelCta: 'Reserver en ligne',
+        },
+        {
+          surtitre: 'Par telephone, partout',
+          titre: '30 minutes',
+          description:
+            "Trente minutes par telephone, depuis La Reunion, l'Ile Maurice, la metropole ou n'importe ou.",
+          features: [
+            'Consultation de 30 minutes par telephone uniquement',
+            "Jocelyn vous appelle a l'heure du rendez-vous",
+            'Memes methodes que le cabinet, en condense',
+            'Aucun deplacement, ou que vous soyez',
+          ],
+          duree: '30 minutes',
+          prix: '85',
+          labelCta: 'Reserver en ligne',
+        },
+      ],
+    }),
+    defineField({
+      name: 'regulieresSurtitre',
+      title: 'Surtitre (seances regulieres)',
+      type: 'string',
+      group: 'regulieres',
+      initialValue: 'Suivi dans la duree',
+    }),
+    defineField({
+      name: 'regulieresTitre',
+      title: 'Titre (seances regulieres)',
+      type: 'string',
+      group: 'regulieres',
+      initialValue: 'Seances regulieres, tarif preferentiel',
+    }),
+    defineField({
+      name: 'regulieresDescription',
+      title: 'Texte (seances regulieres)',
+      type: 'text',
+      rows: 3,
+      group: 'regulieres',
+      initialValue:
+        "Vous souhaitez consulter plusieurs fois dans l'annee ? Un tarif preferentiel s'applique pour un accompagnement suivi, au cabinet ou a distance. Le detail se fait sur devis, selon votre rythme.",
+    }),
+    defineField({
+      name: 'regulieresLabelCta',
+      title: 'Texte du bouton (seances regulieres)',
+      type: 'string',
+      group: 'regulieres',
+      initialValue: 'Demander un devis',
+    }),
+    defineField({
+      name: 'autreSurtitre',
+      title: 'Surtitre (autre demande)',
+      type: 'string',
+      group: 'autre',
+      initialValue: 'Autre demande',
+    }),
+    defineField({
+      name: 'autreTitre',
+      title: 'Titre (autre demande)',
+      type: 'string',
+      group: 'autre',
+      initialValue: 'Coaching de vie ou question specifique ?',
+    }),
+    defineField({
+      name: 'autreDescription',
+      title: 'Texte (autre demande)',
+      type: 'text',
+      rows: 3,
+      group: 'autre',
+      initialValue:
+        'Pour un accompagnement coaching, une question avant de reserver, ou toute autre demande, contactez directement Jocelyn.',
+    }),
+    defineField({
+      name: 'autreLabelContact',
+      title: 'Texte du bouton message',
+      type: 'string',
+      group: 'autre',
+      initialValue: 'Envoyer un message',
+    }),
+    defineField({
+      name: 'autreLabelTel',
+      title: 'Texte du bouton appel',
+      type: 'string',
+      group: 'autre',
+      initialValue: 'Appeler',
+    }),
+    defineField({
+      name: 'noteFooter',
+      title: 'Note de bas de page',
+      type: 'text',
+      rows: 2,
+      group: 'footer',
+      initialValue:
+        'Paiement securise. Apres le reglement, vous etes recontacte sous 24h pour confirmer votre rendez-vous. Annulation possible jusqu\'a 24h avant.',
+    }),
+  ],
+  preview: {prepare: () => ({title: 'Page Reserver'})},
+})

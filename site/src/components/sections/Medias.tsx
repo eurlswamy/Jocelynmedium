@@ -7,7 +7,20 @@ import { ArrowRight, Calendar } from "lucide-react";
 
 const EASE_LUXE = [0.22, 1, 0.36, 1] as const;
 
-export function Medias() {
+// Contenu editable injecte depuis Sanity (page d'accueil, groupe Medias).
+// Tous les champs sont optionnels : repli sur les defauts en dur ci-dessous.
+export type MediasContent = {
+  surtitre?: string;
+  titre?: string;
+  titreItalique?: string;
+  description?: string;
+};
+
+function val(value: string | undefined, fallback: string): string {
+  return value && value.trim().length > 0 ? value : fallback;
+}
+
+export function Medias({ content }: { content?: MediasContent } = {}) {
   return (
     <section
       id="medias"
@@ -47,15 +60,15 @@ export function Medias() {
               <div className="inline-flex items-center gap-3 mb-5">
                 <span className="h-px w-10 bg-or-doux/70" />
                 <p className="text-or-clair font-sans text-xs tracking-[0.45em] uppercase">
-                  Médias et presse
+                  {val(content?.surtitre, "Médias et presse")}
                 </p>
               </div>
               <h2 className="font-serif text-4xl md:text-5xl lg:text-[3.25rem] text-ivoire leading-[1.05] tracking-tight mb-4">
-                Trente ans{" "}
-                <span className="italic text-or-clair">sous les projecteurs.</span>
+                {val(content?.titre, "Trente ans")}{" "}
+                <span className="italic text-or-clair">{val(content?.titreItalique, "sous les projecteurs.")}</span>
               </h2>
               <p className="font-sans text-ivoire/75 text-base md:text-lg leading-relaxed mb-7 max-w-md">
-                Présence hebdomadaire à la télévision réunionnaise depuis quinze ans. Une carrière médiatique construite sur la durée.
+                {val(content?.description, "Présence hebdomadaire à la télévision réunionnaise depuis quinze ans. Une carrière médiatique construite sur la durée.")}
               </p>
             </motion.div>
 
