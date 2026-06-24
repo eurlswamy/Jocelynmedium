@@ -7,6 +7,7 @@ export default defineType({
   groups: [
     {name: 'entete', title: 'En-tete'},
     {name: 'medias', title: 'Presence mediatique'},
+    {name: 'videos', title: 'Emissions a revoir (videos)'},
     {name: 'nationale', title: 'Presence nationale'},
     {name: 'distinctions', title: 'Distinctions'},
     {name: 'cta', title: 'Boutons'},
@@ -68,6 +69,71 @@ export default defineType({
             'Des emissions consacrees a la spiritualite, aux traditions reunionnaises et a la voyance.',
           frequence: 'Interventions regulieres',
           lieu: 'La Reunion',
+        },
+      ],
+    }),
+    defineField({
+      name: 'videosSurtitre',
+      title: 'Surtitre du bloc videos',
+      type: 'string',
+      group: 'videos',
+      initialValue: 'A revoir en video',
+    }),
+    defineField({
+      name: 'videosTitre',
+      title: 'Titre du bloc videos',
+      description: 'Affiche au-dessus des cartes video (ex : Jocelyn a la television).',
+      type: 'string',
+      group: 'videos',
+      initialValue: 'Jocelyn a la television',
+    }),
+    defineField({
+      name: 'videos',
+      title: 'Emissions et passages televises',
+      description:
+        "Liste de videos (lives ou rediffusions Facebook). Chaque carte affiche un titre et un bouton qui ouvre la video dans un nouvel onglet. Pour ajouter une video : copiez le lien de partage Facebook dans le champ Lien.",
+      type: 'array',
+      group: 'videos',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'titre',
+              title: 'Titre de la video',
+              description: 'Ex : Emission Tele Kreol, Passage en direct...',
+              type: 'string',
+            }),
+            defineField({
+              name: 'description',
+              title: 'Courte description (optionnel)',
+              type: 'string',
+            }),
+            defineField({
+              name: 'lien',
+              title: 'Lien de la video (Facebook)',
+              description: 'Collez ici le lien de partage de la video Facebook.',
+              type: 'url',
+            }),
+          ],
+          preview: {select: {title: 'titre', subtitle: 'lien'}},
+        }),
+      ],
+      initialValue: [
+        {
+          titre: 'Jocelyn en direct a la television',
+          description: 'Emission en direct sur les reseaux de Jocelyn.',
+          lien: 'https://www.facebook.com/share/v/19EXTwkeGN/',
+        },
+        {
+          titre: 'Rediffusion : passage televise',
+          description: 'Un de ses passages a revoir.',
+          lien: 'https://www.facebook.com/share/v/1BQRfTSB5p/',
+        },
+        {
+          titre: 'Jocelyn a l antenne',
+          description: 'Une autre emission a revoir.',
+          lien: 'https://www.facebook.com/share/v/1LJXM3pND9/',
         },
       ],
     }),

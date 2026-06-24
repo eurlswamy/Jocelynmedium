@@ -1,6 +1,6 @@
 import { Seuil } from "@/components/sections/Seuil";
 import { Footer } from "@/components/sections/Footer";
-import { ArrowRight, Calendar } from "lucide-react";
+import { ArrowRight, Calendar, Play } from "lucide-react";
 import { safeFetch, pick } from "@/lib/sanity";
 import { getPageGlobale } from "@/lib/global-content";
 
@@ -9,6 +9,8 @@ import { getPageGlobale } from "@/lib/global-content";
 const MEDIAS_QUERY = `*[_id == "pageMedias"][0]{
   surtitre, titre, titreItalique,
   medias[]{label, nom, description, frequence, lieu},
+  videosSurtitre, videosTitre,
+  videos[]{titre, description, lien},
   nationaleSurtitre, nationaleTitre, nationaleTitreItalique, nationaleDescription,
   distinctions[]{annee, label, lieu},
   labelCta1, labelCta2
@@ -16,6 +18,28 @@ const MEDIAS_QUERY = `*[_id == "pageMedias"][0]{
 
 type Media = { label?: string; nom?: string; description?: string; frequence?: string; lieu?: string };
 type Distinction = { annee?: string; label?: string; lieu?: string };
+type VideoEmission = { titre?: string; description?: string; lien?: string };
+
+// Videos par defaut (lives et rediffusions Facebook de Jocelyn). Editables
+// depuis le Studio ; le bloc ne s'affiche que s'il y a au moins une video
+// avec un lien valide.
+const VIDEOS_DEFAUT: VideoEmission[] = [
+  {
+    titre: "Jocelyn en direct à la télévision",
+    description: "Émission en direct à revoir.",
+    lien: "https://www.facebook.com/share/v/19EXTwkeGN/",
+  },
+  {
+    titre: "Rediffusion : passage télévisé",
+    description: "Un de ses passages à revoir.",
+    lien: "https://www.facebook.com/share/v/1BQRfTSB5p/",
+  },
+  {
+    titre: "Jocelyn à l'antenne",
+    description: "Une autre émission à revoir.",
+    lien: "https://www.facebook.com/share/v/1LJXM3pND9/",
+  },
+];
 
 export const metadata = {
   title: "Médias & Presse · Jocelyn Amir",
@@ -53,6 +77,13 @@ export default async function MediasPressePage() {
         side: DISTINCTIONS_DEFAUT[i]?.side ?? (i % 2 === 0 ? "bottom" : "top"),
       }))
     : DISTINCTIONS_DEFAUT);
+
+  // Videos : on prend celles de Sanity si au moins une a un lien, sinon les
+  // defauts. Seules les videos avec un lien non vide sont affichees.
+  const sanityVideos = ((p?.videos as VideoEmission[] | undefined) ?? []).filter(
+    (v) => (v?.lien ?? "").trim().length > 0
+  );
+  const videos = sanityVideos.length > 0 ? sanityVideos : VIDEOS_DEFAUT;
 
   return (
     <main className="bg-ivoire">
@@ -124,6 +155,66 @@ export default async function MediasPressePage() {
         </div>
 
         <div aria-hidden className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-or-doux/30 to-transparent" />
+      </section>
+
+      {/* Emissions a revoir : cartes liees aux videos Facebook (preuve sociale).
+          Liens ouverts dans un nouvel onglet, aucun script tiers charge. */}
+      <section className="bg-ivoire py-16 md:py-20">
+        <div className="max-w-6xl mx-auto px-6 md:px-12">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <p className="font-sans text-xs tracking-[0.45em] uppercase text-encre/40 mb-3">
+              {pick(p?.videosSurtitre as string | undefined, "À revoir en vidéo")}
+            </p>
+            <h2 className="font-serif text-3xl md:text-4xl text-encre leading-tight">
+              {pick(p?.videosTitre as string | undefined, "Jocelyn à la télévision")}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {videos.map((v, i) => (
+              <a
+                key={i}
+                href={v.lien}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative flex flex-col rounded-2xl overflow-hidden border border-encre/12 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-bleu-majorelle/40 hover:shadow-xl"
+              >
+                {/* Vignette : bandeau couleur + bouton lecture (pas de miniature
+                    Facebook pour eviter tout script tiers). */}
+                <div
+                  className="relative aspect-video flex items-center justify-center"
+                  style={{ background: "linear-gradient(135deg, #1B7A8F 0%, #0B1929 100%)" }}
+                >
+                  <span className="flex items-center justify-center w-16 h-16 rounded-full bg-white/15 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                    <Play size={26} strokeWidth={1.8} className="text-ivoire ml-1" fill="currentColor" />
+                  </span>
+                  <span className="absolute top-3 left-3 font-sans text-[10px] tracking-[0.2em] uppercase text-ivoire/80 bg-black/25 rounded-full px-3 py-1">
+                    Vidéo
+                  </span>
+                </div>
+
+                <div className="flex flex-col flex-1 p-5">
+                  <h3 className="font-serif text-lg text-encre leading-snug mb-1.5">
+                    {v.titre || "Émission à revoir"}
+                  </h3>
+                  {v.description ? (
+                    <p className="font-sans text-encre/60 text-sm leading-relaxed mb-4">
+                      {v.description}
+                    </p>
+                  ) : null}
+                  <span className="mt-auto inline-flex items-center gap-2 font-sans text-[12px] tracking-[0.12em] uppercase text-bleu-majorelle">
+                    Voir l&apos;émission
+                    <ArrowRight size={14} strokeWidth={2} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <p className="text-center font-sans text-encre/40 text-[11px] mt-6">
+            Les vidéos s&apos;ouvrent sur Facebook dans un nouvel onglet.
+          </p>
+        </div>
       </section>
 
       {/* Festival de Cannes */}
