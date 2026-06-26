@@ -39,6 +39,11 @@ const VIDEOS_DEFAUT: VideoEmission[] = [
     description: "Une autre émission à revoir.",
     lien: "https://www.facebook.com/share/v/1LJXM3pND9/",
   },
+  {
+    titre: "Jocelyn à la télévision",
+    description: "Un passage télévisé à revoir.",
+    lien: "https://www.facebook.com/share/v/18jez5wTEu/",
+  },
 ];
 
 export const metadata = {
@@ -170,7 +175,7 @@ export default async function MediasPressePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {videos.map((v, i) => (
               <a
                 key={i}

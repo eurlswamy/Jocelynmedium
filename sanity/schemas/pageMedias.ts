@@ -135,6 +135,11 @@ export default defineType({
           description: 'Une autre emission a revoir.',
           lien: 'https://www.facebook.com/share/v/1LJXM3pND9/',
         },
+        {
+          titre: 'Jocelyn a la television',
+          description: 'Un passage televise a revoir.',
+          lien: 'https://www.facebook.com/share/v/18jez5wTEu/',
+        },
       ],
     }),
     defineField({

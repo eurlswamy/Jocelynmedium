@@ -38,10 +38,11 @@ export default async function ConfidentialitePage() {
               </h2>
               <p className="font-sans text-encre/70 leading-relaxed text-sm md:text-base">
                 Le responsable du traitement des données est
-                [À COMPLÉTER PAR LE CLIENT : raison sociale exacte, ex. EURL SWAMY],
+                la SARL SWAMY (SIREN 483 360 996),
                 représentée par Jocelyn Amir Swamy, dont le siège est situé
-                [À COMPLÉTER PAR LE CLIENT : adresse du siège]. Pour toute question
-                relative à vos données, vous pouvez écrire à contact@jocelynamir.com.
+                Apt 2A Résidence Les Lilas, 10 rue Adolphe Ramassamy, 97490 Saint-Denis,
+                La Réunion. Pour toute question relative à vos données, vous pouvez
+                écrire à contact@jocelynamir.com.
               </p>
             </section>
 

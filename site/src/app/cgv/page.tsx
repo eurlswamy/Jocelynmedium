@@ -40,10 +40,11 @@ export default async function CgvPage() {
               <p className="font-sans text-encre/70 leading-relaxed text-sm md:text-base">
                 Les présentes conditions générales de vente régissent les prestations
                 de voyance, de médiumnité et de coaching de vie proposées par
-                [À COMPLÉTER PAR LE CLIENT : raison sociale exacte, ex. EURL SWAMY],
+                la SARL SWAMY (SIREN 483 360 996),
                 représentée par Jocelyn Amir Swamy, dont le siège est situé
-                [À COMPLÉTER PAR LE CLIENT : adresse du siège]. Toute réservation
-                vaut acceptation pleine et entière des présentes conditions.
+                Apt 2A Résidence Les Lilas, 10 rue Adolphe Ramassamy, 97490 Saint-Denis,
+                La Réunion. Toute réservation vaut acceptation pleine et entière des
+                présentes conditions.
               </p>
             </section>
 

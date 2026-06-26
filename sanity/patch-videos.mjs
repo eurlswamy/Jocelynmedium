@@ -33,6 +33,12 @@ const videos = [
     description: 'Une autre emission a revoir.',
     lien: 'https://www.facebook.com/share/v/1LJXM3pND9/',
   },
+  {
+    _key: 'vid3',
+    titre: 'Jocelyn a la television',
+    description: 'Un passage televise a revoir.',
+    lien: 'https://www.facebook.com/share/v/18jez5wTEu/',
+  },
 ]
 
 const res = await client

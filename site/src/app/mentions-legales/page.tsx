@@ -38,13 +38,13 @@ export default async function MentionsLegalesPage() {
               </h2>
               <div className="font-sans text-encre/70 leading-relaxed text-sm md:text-base space-y-1">
                 <p>Le site jocelynamir.com est édité par :</p>
-                <p>Raison sociale : [À COMPLÉTER PAR LE CLIENT : raison sociale exacte, ex. EURL SWAMY]</p>
-                <p>Forme juridique : [À COMPLÉTER PAR LE CLIENT : forme juridique, ex. EURL]</p>
+                <p>Raison sociale : SARL SWAMY</p>
+                <p>Forme juridique : société à responsabilité limitée (SARL)</p>
                 <p>Représentant légal : Jocelyn Amir Swamy, gérant</p>
-                <p>Adresse du siège social : [À COMPLÉTER PAR LE CLIENT : adresse complète du siège, Saint-Clotilde, La Réunion 974]</p>
+                <p>Adresse du siège social : Apt 2A Résidence Les Lilas, 10 rue Adolphe Ramassamy, 97490 Saint-Denis, La Réunion</p>
                 <p>Capital social : [À COMPLÉTER PAR LE CLIENT : montant du capital social]</p>
-                <p>Numéro SIRET : [À COMPLÉTER PAR LE CLIENT : numéro SIRET à 14 chiffres]</p>
-                <p>RCS : [À COMPLÉTER PAR LE CLIENT : ville d'immatriculation au RCS et numéro]</p>
+                <p>Numéro SIREN : 483 360 996</p>
+                <p>RCS : Saint-Denis 483 360 996</p>
                 <p>Numéro de TVA intracommunautaire : [À COMPLÉTER PAR LE CLIENT : numéro de TVA si assujetti, sinon mentionner « non assujetti à la TVA »]</p>
                 <p>Téléphone : +262 692 81 36 06</p>
                 <p>Adresse e-mail : contact@jocelynamir.com</p>
