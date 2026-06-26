@@ -40,7 +40,7 @@ export default async function MentionsLegalesPage() {
                 <p>Le site jocelynamir.com est édité par :</p>
                 <p>Raison sociale : SARL SWAMY</p>
                 <p>Forme juridique : société à responsabilité limitée (SARL)</p>
-                <p>Représentant légal : Jocelyn Amir Swamy, gérant</p>
+                <p>Représentant légal : Franck Richard, gérant</p>
                 <p>Adresse du siège social : Apt 2A Résidence Les Lilas, 10 rue Adolphe Ramassamy, 97490 Saint-Denis, La Réunion</p>
                 <p>Capital social : [À COMPLÉTER PAR LE CLIENT : montant du capital social]</p>
                 <p>Numéro SIREN : 483 360 996</p>

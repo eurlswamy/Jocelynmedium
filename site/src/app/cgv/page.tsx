@@ -41,7 +41,7 @@ export default async function CgvPage() {
                 Les présentes conditions générales de vente régissent les prestations
                 de voyance, de médiumnité et de coaching de vie proposées par
                 la SARL SWAMY (SIREN 483 360 996),
-                représentée par Jocelyn Amir Swamy, dont le siège est situé
+                représentée par son gérant Franck Richard, dont le siège est situé
                 Apt 2A Résidence Les Lilas, 10 rue Adolphe Ramassamy, 97490 Saint-Denis,
                 La Réunion. Toute réservation vaut acceptation pleine et entière des
                 présentes conditions.
