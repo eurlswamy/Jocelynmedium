@@ -21,7 +21,7 @@ export default defineType({
       description: "Petit texte affiche tout en haut de la page d'accueil, au-dessus du grand titre.",
       type: 'string',
       group: 'hero',
-      initialValue: 'Medium voyant, La Reunion, Depuis 1994',
+      initialValue: 'Médium voyant, La Réunion, depuis 1994',
     }),
     defineField({
       name: 'heroTitre',
@@ -37,7 +37,7 @@ export default defineType({
       description: 'Suite du grand titre, affichee en italique juste apres le premier mot.',
       type: 'string',
       group: 'hero',
-      initialValue: 'au-dela',
+      initialValue: 'au-delà',
     }),
     defineField({
       name: 'heroTitreSuite',
@@ -55,7 +55,7 @@ export default defineType({
       rows: 3,
       group: 'hero',
       initialValue:
-        "Trente ans de pratique. Quatre methodes combinees. Une heure de consultation pour des informations concretes, pas des predictions floues.",
+        'Trente ans de pratique. Quatre méthodes combinées. Une heure de consultation pour des informations concrètes, pas des prédictions floues.',
     }),
     defineField({
       name: 'heroCta1',
@@ -63,7 +63,7 @@ export default defineType({
       description: 'Libelle du premier bouton dans la banniere.',
       type: 'string',
       group: 'hero',
-      initialValue: 'Reserver une consultation',
+      initialValue: 'Réserver une consultation',
     }),
     defineField({
       name: 'heroCta2',
@@ -97,7 +97,7 @@ export default defineType({
       description: 'Partie du titre affichee en italique.',
       type: 'string',
       group: 'intro',
-      initialValue: 'Medium depuis 1994',
+      initialValue: 'Médium depuis 1994',
     }),
     defineField({
       name: 'introDescription',
@@ -107,7 +107,7 @@ export default defineType({
       rows: 4,
       group: 'intro',
       initialValue:
-        "Je vous recois a Saint-Clotilde, a La Reunion. Je vous accompagne aussi par telephone et en visio, ou que vous soyez dans l'Ocean Indien. Au cours d'une consultation d'une heure, je combine quatre approches : clairvoyance, clairaudience, tirage de cartes, et voyance sur photo ou document.",
+        "Je vous reçois à Saint-Clotilde, à La Réunion. Je vous accompagne aussi par téléphone et en visio, où que vous soyez dans l'Océan Indien. Au cours d'une consultation d'une heure, je combine quatre approches : clairvoyance, clairaudience, tirage de cartes, et voyance sur photo ou document.",
     }),
     defineField({
       name: 'introStats',
@@ -126,10 +126,10 @@ export default defineType({
         }),
       ],
       initialValue: [
-        {valeur: '30+', label: 'Annees de pratique'},
-        {valeur: '4', label: 'Methodes combinees'},
+        {valeur: '30+', label: 'Années de pratique'},
+        {valeur: '4', label: 'Méthodes combinées'},
         {valeur: '1h', label: 'Par consultation'},
-        {valeur: '15 ans', label: "A l'antenne TV"},
+        {valeur: '15 ans', label: "À l'antenne TV"},
       ],
     }),
 
@@ -153,7 +153,7 @@ export default defineType({
       title: 'Titre en italique (section Discretion)',
       type: 'string',
       group: 'discretion',
-      initialValue: 'discretion.',
+      initialValue: 'discrétion.',
     }),
     defineField({
       name: 'discretionPiliers',
@@ -175,17 +175,17 @@ export default defineType({
         {
           titre: 'Anonymat total',
           texte:
-            'Personne ne sait que vous avez consulte. Vos coordonnees restent strictement privees, jamais transmises ni conservees.',
+            'Personne ne sait que vous avez consulté. Vos coordonnées restent strictement privées, jamais transmises ni conservées.',
         },
         {
-          titre: 'Confidentialite absolue',
+          titre: 'Confidentialité absolue',
           texte:
-            'Ce qui est dit dans la seance reste entre vous et Jocelyn. Aucun enregistrement, aucune note conservee apres la consultation.',
+            'Ce qui est dit dans la séance reste entre vous et Jocelyn. Aucun enregistrement, aucune note conservée après la consultation.',
         },
         {
           titre: 'Sans jugement',
           texte:
-            'Venez avec vos doutes, vos peurs, vos questions les plus intimes. Ce que vous portez ne sera jamais minimise ni commente en dehors.',
+            'Venez avec vos doutes, vos peurs, vos questions les plus intimes. Ce que vous portez ne sera jamais minimisé ni commenté en dehors.',
         },
       ],
     }),
@@ -196,7 +196,7 @@ export default defineType({
       title: 'Surtitre (section Medias et presse)',
       type: 'string',
       group: 'medias',
-      initialValue: 'Medias et presse',
+      initialValue: 'Médias et presse',
     }),
     defineField({
       name: 'mediasTitre',
@@ -219,7 +219,7 @@ export default defineType({
       rows: 3,
       group: 'medias',
       initialValue:
-        'Presence hebdomadaire a la television reunionnaise depuis quinze ans. Une carriere mediatique construite sur la duree.',
+        'Présence hebdomadaire à la télévision réunionnaise depuis quinze ans. Une carrière médiatique construite sur la durée.',
     }),
 
     // APERCU DES METHODES (page d'accueil, section "Comment je travaille")
@@ -255,7 +255,7 @@ export default defineType({
       rows: 3,
       group: 'methodesApercu',
       initialValue:
-        'Quatre methodes combinees dans une seule consultation. Pas de predictions floues : des elements concrets et verifiables.',
+        'Quatre méthodes combinées dans une seule consultation. Pas de prédictions floues : des éléments concrets et vérifiables.',
     }),
     defineField({
       name: 'apercuMethodes',
@@ -276,15 +276,15 @@ export default defineType({
       initialValue: [
         {
           titre: 'Clairvoyance',
-          description: 'Des images, des flashs, des scenes liees a votre passe, present ou avenir.',
+          description: 'Des images, des flashs, des scènes liées à votre passé, présent ou avenir.',
         },
         {
           titre: 'Clairaudience',
-          description: "Voix, prenoms, phrases courtes captes a l'oreille interieure.",
+          description: "Voix, prénoms, phrases courtes captés à l'oreille intérieure.",
         },
         {
           titre: 'Tirage de cartes',
-          description: 'Tarots et oracles, en complement, pour structurer les visions.',
+          description: 'Tarots et oracles, en complément, pour structurer les visions.',
         },
         {
           titre: 'Voyance sur support',
@@ -313,7 +313,7 @@ export default defineType({
       title: 'Titre en italique (section FAQ)',
       type: 'string',
       group: 'faqHeader',
-      initialValue: 'mes reponses.',
+      initialValue: 'mes réponses.',
     }),
 
     // FAQ : liste des questions et reponses
@@ -335,44 +335,44 @@ export default defineType({
       ],
       initialValue: [
         {
-          question: 'Comment se deroule une consultation ?',
+          question: 'Comment se déroule une consultation ?',
           reponse:
-            "Le plus simplement et naturellement possible. Mon bureau est zen et chaleureux. A vous de vous detendre. La consultation commence rapidement : des choses surprenantes, parfois difficiles a croire, seront dites. C'est normal. Je vous guide, j'eclaire votre chemin, je projette une lumiere sur votre avenir. Rien n'est fige, tout peut evoluer selon vos choix.",
+            "Le plus simplement et naturellement possible. Mon bureau est zen et chaleureux. À vous de vous détendre. La consultation commence rapidement : des choses surprenantes, parfois difficiles à croire, seront dites. C'est normal. Je vous guide, j'éclaire votre chemin, je projette une lumière sur votre avenir. Rien n'est figé, tout peut évoluer selon vos choix.",
         },
         {
-          question: "Faut-il preparer quelque chose a l'avance ?",
+          question: "Faut-il préparer quelque chose à l'avance ?",
           reponse:
-            'Non. Vous venez tel que vous etes. Vous pouvez apporter une photo ou un document si vous voulez consulter sur une personne ou une situation precise. Sinon, je travaille directement avec vous, sans support.',
+            'Non. Vous venez tel que vous êtes. Vous pouvez apporter une photo ou un document si vous voulez consulter sur une personne ou une situation précise. Sinon, je travaille directement avec vous, sans support.',
         },
         {
-          question: 'Puis-je consulter a distance ?',
+          question: 'Puis-je consulter à distance ?',
           reponse:
-            "Oui. Les consultations telephoniques de 30 minutes sont disponibles. La precision est identique : la voyance ne depend pas de la proximite physique. C'est ideal si vous etes a l'Ile Maurice, en metropole, ou ailleurs.",
+            "Oui. Les consultations téléphoniques de 30 minutes sont disponibles. La précision est identique : la voyance ne dépend pas de la proximité physique. C'est idéal si vous êtes à l'Île Maurice, en métropole, ou ailleurs.",
         },
         {
           question: 'Comment payer ?',
           reponse:
-            'Le paiement se fait directement en ligne lors de la reservation, par carte bancaire (Visa, Mastercard, Apple Pay, Google Pay). Paiement 100% securise via Stripe. Une fois le paiement effectue, vous etes recontacte sous 24h pour confirmer votre rendez-vous et convenir du creneau.',
+            'Le paiement se fait directement en ligne lors de la réservation, par carte bancaire (Visa, Mastercard, Apple Pay, Google Pay). Paiement 100% sécurisé via Stripe. Une fois le paiement effectué, vous êtes recontacté sous 24h pour confirmer votre rendez-vous et convenir du créneau.',
         },
         {
           question: 'Puis-je annuler ?',
           reponse:
-            "Oui, jusqu'a 24h avant la consultation, sans frais. Au-dela, l'acompte n'est pas remboursable, mais le rendez-vous peut etre reporte une fois si vous me prevenez a temps.",
+            "Oui, jusqu'à 24h avant la consultation, sans frais. Au-delà, l'acompte n'est pas remboursable, mais le rendez-vous peut être reporté une fois si vous me prévenez à temps.",
         },
         {
           question: 'Le secret professionnel est-il garanti ?',
           reponse:
-            "Absolument. Tout l'entretien est strictement confidentiel. Je n'evoque jamais ce qui se dit en consultation avec qui que ce soit. Mieux vaut consulter seul, pour vous, pour la qualite du travail.",
+            "Absolument. Tout l'entretien est strictement confidentiel. Je n'évoque jamais ce qui se dit en consultation avec qui que ce soit. Mieux vaut consulter seul, pour vous, pour la qualité du travail.",
         },
         {
-          question: 'Que faire si je suis bouleverse apres la consultation ?',
+          question: 'Que faire si je suis bouleversé après la consultation ?',
           reponse:
-            "C'est normal. Une consultation provoque des emotions, joyeuses ou tristes : on fait remonter de vieux souvenirs, parfois des epreuves enfouies. Prenez le temps, parlez a un proche. Et soyez vraiment sur de vous avant de prendre rendez-vous.",
+            "C'est normal. Une consultation provoque des émotions, joyeuses ou tristes : on fait remonter de vieux souvenirs, parfois des épreuves enfouies. Prenez le temps, parlez à un proche. Et soyez vraiment sûr de vous avant de prendre rendez-vous.",
         },
         {
           question: 'Proposez-vous autre chose que de la voyance ?',
           reponse:
-            "Oui. A la suite de nombreuses demandes de consultants souhaitant un suivi regulier, je propose desormais un accompagnement coaching de vie et developpement personnel. Estime de soi, reconversion, relations, gestion des emotions, epanouissement : un espace d'ecoute bienveillant et oriente action. Ce service est complementaire a la voyance, il ne s'y substitue pas, et ne remplace pas non plus un suivi psychologique ou medical.",
+            "Oui. À la suite de nombreuses demandes de consultants souhaitant un suivi régulier, je propose désormais un accompagnement coaching de vie et développement personnel. Estime de soi, reconversion, relations, gestion des émotions, épanouissement : un espace d'écoute bienveillant et orienté action. Ce service est complémentaire à la voyance, il ne s'y substitue pas, et ne remplace pas non plus un suivi psychologique ou médical.",
         },
       ],
     }),

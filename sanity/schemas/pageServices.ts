@@ -16,7 +16,7 @@ export default defineType({
       name: 'titre',
       title: 'Titre de la page',
       type: 'string',
-      initialValue: 'Plusieurs facons de',
+      initialValue: 'Plusieurs façons de',
     }),
     defineField({
       name: 'titreItalique',
@@ -30,7 +30,7 @@ export default defineType({
       type: 'text',
       rows: 3,
       initialValue:
-        'Paiement securise en ligne, Confirmation sous 24h, Annulation jusqu\'a 24h avant.',
+        "Paiement sécurisé en ligne, Confirmation sous 24h, Annulation jusqu'à 24h avant.",
     }),
     defineField({
       name: 'formules',
@@ -60,31 +60,31 @@ export default defineType({
       ],
       initialValue: [
         {
-          surtitre: 'Au cabinet ou a distance',
+          surtitre: 'Au cabinet ou à distance',
           titre: 'Une heure',
           duree: '1 heure',
           prix: '120',
           accroche:
-            'La consultation complete : au cabinet a Saint-Clotilde ou a distance, au meme tarif. Les quatre methodes combinees, sans precipitation.',
+            'La consultation complète : au cabinet à Saint-Clotilde ou à distance, au même tarif. Les quatre méthodes combinées, sans précipitation.',
           features: [
-            'Au cabinet a Saint-Clotilde ou a distance',
+            'Au cabinet à Saint-Clotilde ou à distance',
             'Clairvoyance, clairaudience, tirage, support',
             'Photos, courriers, objets bienvenus',
           ],
-          tag: 'Recommande',
-          labelCta: 'Reserver en ligne',
+          tag: 'Recommandé',
+          labelCta: 'Réserver en ligne',
         },
         {
-          surtitre: 'Par telephone, partout',
+          surtitre: 'Par téléphone, partout',
           titre: '30 minutes',
           duree: '30 min',
           prix: '85',
           accroche:
-            "Une seance condensee, uniquement par telephone. Depuis La Reunion, l'Ile Maurice, la metropole ou n'importe ou.",
+            "Une séance condensée, uniquement par téléphone. Depuis La Réunion, l'Île Maurice, la métropole ou n'importe où.",
           features: [
-            'Consultation par telephone uniquement',
-            'Memes methodes que le cabinet, en condense',
-            'Ideal pour les emplois du temps charges',
+            'Consultation par téléphone uniquement',
+            'Mêmes méthodes que le cabinet, en condensé',
+            'Idéal pour les emplois du temps chargés',
           ],
           tag: '',
           labelCta: 'Reserver en ligne',
@@ -95,26 +95,26 @@ export default defineType({
           duree: 'Sur mesure',
           prix: 'Sur mesure',
           accroche:
-            'Un suivi personnalise pour surmonter les obstacles, retrouver confiance en soi et avancer vers vos objectifs.',
+            'Un suivi personnalisé pour surmonter les obstacles, retrouver confiance en soi et avancer vers vos objectifs.',
           features: [
-            'Ecoute active et empathique, sans jugement',
+            'Écoute active et empathique, sans jugement',
             'Estime de soi, reconversion, relations',
-            'Complement aux consultations de voyance',
+            'Complément aux consultations de voyance',
           ],
           tag: 'Nouveau',
           labelCta: 'Nous contacter',
         },
         {
-          surtitre: 'Suivi dans la duree',
-          titre: 'Seances regulieres',
+          surtitre: 'Suivi dans la durée',
+          titre: 'Séances régulières',
           duree: 'Sur mesure',
           prix: 'Sur mesure',
           accroche:
-            'Vous souhaitez consulter plusieurs fois dans l\'annee ? Beneficiez d\'un tarif preferentiel pour un accompagnement suivi.',
+            "Vous souhaitez consulter plusieurs fois dans l'année ? Bénéficiez d'un tarif préférentiel pour un accompagnement suivi.",
           features: [
-            'Tarif preferentiel sur vos consultations',
-            'Formule au cabinet ou a distance',
-            'Devis personnalise selon votre rythme',
+            'Tarif préférentiel sur vos consultations',
+            'Formule au cabinet ou à distance',
+            'Devis personnalisé selon votre rythme',
           ],
           tag: '',
           labelCta: 'Nous contacter',

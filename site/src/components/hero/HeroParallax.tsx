@@ -471,43 +471,11 @@ export function HeroParallax({ content }: { content?: HeroContent } = {}) {
             apparaisse exactement à la même position. */}
         <div
           ref={badgeLayerRef}
-          className="absolute inset-0 flex items-end md:items-center justify-center md:justify-start pointer-events-none"
+          className="absolute inset-0 hidden md:flex items-center justify-start pointer-events-none"
         >
-          {/* MOBILE : badge verre dépoli centré en bas */}
-          <div className="md:hidden w-full px-5 pb-28 pt-8 text-center">
-            <span
-              className="inline-block px-3 py-1.5 text-ivoire font-sans text-[8.5px] tracking-[0.08em] uppercase mb-3 rounded-full border border-ivoire/25 whitespace-nowrap"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(247,243,236,0.10) 0%, rgba(247,243,236,0.04) 100%)",
-                backdropFilter: "blur(20px) saturate(150%)",
-                WebkitBackdropFilter: "blur(20px) saturate(150%)",
-                textShadow: "0 1px 8px rgba(0,0,0,0.55)",
-                boxShadow:
-                  "0 6px 24px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)",
-              }}
-            >
-              {heroBadge}
-            </span>
-            {/* Espaceurs invisibles pour aligner verticalement avec heroLayer mobile */}
-            <h2
-              aria-hidden
-              className="font-serif text-[clamp(1.65rem,7.5vw,2rem)] leading-[1.08] mb-5 invisible"
-            >
-              Au-delà des portes du visible.
-            </h2>
-            <p
-              aria-hidden
-              className="font-sans text-[13px] leading-relaxed mb-7 px-2 max-w-[42ch] mx-auto invisible"
-            >
-              Médium voyant à La Réunion depuis plus de 30 ans, au cabinet ou à distance.
-            </p>
-            <div aria-hidden className="flex flex-col gap-3 px-2 invisible">
-              <div className="h-12" />
-              <div className="h-12" />
-            </div>
-          </div>
-
+          {/* DESKTOP uniquement : le badge mobile est désormais rendu dans le
+              flux du heroLayer mobile (au-dessus du titre) pour éviter tout
+              chevauchement et toute désynchronisation au scroll. */}
 
           {/* DESKTOP : badge verre dépoli aligné gauche au centre vertical */}
           <div className="hidden md:block w-[58%] lg:w-1/2 px-12 lg:px-20 text-left">
@@ -564,12 +532,21 @@ export function HeroParallax({ content }: { content?: HeroContent } = {}) {
               badgeLayer (hors du stacking context) pour bénéficier d'un vrai
               effet verre dépoli. Le placeholder invisible ci-dessous garde
               l'alignement vertical identique. */}
-          <div className="md:hidden w-full px-5 pb-28 pt-8 text-center">
+          <div className="md:hidden w-full px-5 pb-28 pt-8 text-center flex flex-col items-center">
+            {/* Badge eyebrow VISIBLE, dans le flux, au-dessus du titre. */}
             <span
-              aria-hidden
-              className="inline-block px-3 py-1.5 text-[8.5px] tracking-[0.08em] uppercase mb-3 invisible"
+              className="inline-block px-3.5 py-1.5 text-ivoire font-sans text-[9px] tracking-[0.18em] uppercase mb-5 rounded-full border border-ivoire/25 whitespace-nowrap"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(247,243,236,0.12) 0%, rgba(247,243,236,0.05) 100%)",
+                backdropFilter: "blur(16px) saturate(150%)",
+                WebkitBackdropFilter: "blur(16px) saturate(150%)",
+                textShadow: "0 1px 8px rgba(0,0,0,0.6)",
+                boxShadow:
+                  "0 6px 24px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)",
+              }}
             >
-              Médium voyant · La Réunion · 1994
+              {heroBadge}
             </span>
 
             <h2
@@ -596,7 +573,7 @@ export function HeroParallax({ content }: { content?: HeroContent } = {}) {
               {val(content?.heroDescription, "Médium voyant à La Réunion depuis plus de 30 ans, au cabinet ou à distance.")}
             </p>
 
-            <div className="flex flex-col gap-3 px-2">
+            <div className="flex flex-col gap-3 px-2 w-full">
               <Link
                 href="/reserver"
                 className="inline-flex items-center justify-center w-full h-12 px-6 rounded-full bg-or-doux text-encre font-medium text-sm tracking-wide hover:bg-or-clair transition-all duration-300"

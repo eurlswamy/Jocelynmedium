@@ -18,7 +18,7 @@ export default defineType({
       title: 'Surtitre de la page',
       type: 'string',
       group: 'entete',
-      initialValue: 'Reservation en ligne',
+      initialValue: 'Réservation en ligne',
     }),
     defineField({
       name: 'titre',
@@ -39,7 +39,7 @@ export default defineType({
       title: 'Titre de la banniere info',
       type: 'string',
       group: 'banniere',
-      initialValue: 'La reservation se fait exclusivement en ligne.',
+      initialValue: 'La réservation se fait exclusivement en ligne.',
     }),
     defineField({
       name: 'banniereTexte',
@@ -48,7 +48,7 @@ export default defineType({
       rows: 3,
       group: 'banniere',
       initialValue:
-        'Les messages et appels ne permettent pas de bloquer un creneau. Choisissez votre formule ci-dessous pour acceder au formulaire et au paiement securise.',
+        'Les messages et appels ne permettent pas de bloquer un créneau. Choisissez votre formule ci-dessous pour accéder au formulaire et au paiement sécurisé.',
     }),
     defineField({
       name: 'formules',
@@ -78,30 +78,30 @@ export default defineType({
       ],
       initialValue: [
         {
-          surtitre: 'Au cabinet ou a distance',
+          surtitre: 'Au cabinet ou à distance',
           titre: 'Une heure',
           description:
-            'Une heure complete, dans mon bureau zen a Saint-Clotilde ou a distance, au meme tarif. Les quatre methodes combinees sans precipitation.',
+            'Une heure complète, dans mon bureau zen à Saint-Clotilde ou à distance, au même tarif. Les quatre méthodes combinées sans précipitation.',
           features: [
-            "Consultation d'une heure pleine, au cabinet ou a distance",
-            'Quatre methodes combinees en une seance',
+            "Consultation d'une heure pleine, au cabinet ou à distance",
+            'Quatre méthodes combinées en une séance',
             'Photos, courriers ou objets bienvenus',
-            'Recap oral a la fin de la seance',
+            'Récap oral à la fin de la séance',
           ],
           duree: '1 heure',
           prix: '120',
           labelCta: 'Reserver en ligne',
         },
         {
-          surtitre: 'Par telephone, partout',
+          surtitre: 'Par téléphone, partout',
           titre: '30 minutes',
           description:
-            "Trente minutes par telephone, depuis La Reunion, l'Ile Maurice, la metropole ou n'importe ou.",
+            "Trente minutes par téléphone, depuis La Réunion, l'Île Maurice, la métropole ou n'importe où.",
           features: [
-            'Consultation de 30 minutes par telephone uniquement',
-            "Jocelyn vous appelle a l'heure du rendez-vous",
-            'Memes methodes que le cabinet, en condense',
-            'Aucun deplacement, ou que vous soyez',
+            'Consultation de 30 minutes par téléphone uniquement',
+            "Jocelyn vous appelle à l'heure du rendez-vous",
+            'Mêmes méthodes que le cabinet, en condensé',
+            'Aucun déplacement, où que vous soyez',
           ],
           duree: '30 minutes',
           prix: '85',
@@ -114,14 +114,14 @@ export default defineType({
       title: 'Surtitre (seances regulieres)',
       type: 'string',
       group: 'regulieres',
-      initialValue: 'Suivi dans la duree',
+      initialValue: 'Suivi dans la durée',
     }),
     defineField({
       name: 'regulieresTitre',
       title: 'Titre (seances regulieres)',
       type: 'string',
       group: 'regulieres',
-      initialValue: 'Seances regulieres, tarif preferentiel',
+      initialValue: 'Séances régulières, tarif préférentiel',
     }),
     defineField({
       name: 'regulieresDescription',
@@ -130,7 +130,7 @@ export default defineType({
       rows: 3,
       group: 'regulieres',
       initialValue:
-        "Vous souhaitez consulter plusieurs fois dans l'annee ? Un tarif preferentiel s'applique pour un accompagnement suivi, au cabinet ou a distance. Le detail se fait sur devis, selon votre rythme.",
+        "Vous souhaitez consulter plusieurs fois dans l'année ? Un tarif préférentiel s'applique pour un accompagnement suivi, au cabinet ou à distance. Le détail se fait sur devis, selon votre rythme.",
     }),
     defineField({
       name: 'regulieresLabelCta',
@@ -151,7 +151,7 @@ export default defineType({
       title: 'Titre (autre demande)',
       type: 'string',
       group: 'autre',
-      initialValue: 'Coaching de vie ou question specifique ?',
+      initialValue: 'Coaching de vie ou question spécifique ?',
     }),
     defineField({
       name: 'autreDescription',
@@ -160,7 +160,7 @@ export default defineType({
       rows: 3,
       group: 'autre',
       initialValue:
-        'Pour un accompagnement coaching, une question avant de reserver, ou toute autre demande, contactez directement Jocelyn.',
+        'Pour un accompagnement coaching, une question avant de réserver, ou toute autre demande, contactez directement Jocelyn.',
     }),
     defineField({
       name: 'autreLabelContact',
@@ -183,7 +183,7 @@ export default defineType({
       rows: 2,
       group: 'footer',
       initialValue:
-        'Paiement securise. Apres le reglement, vous etes recontacte sous 24h pour confirmer votre rendez-vous. Annulation possible jusqu\'a 24h avant.',
+        "Paiement sécurisé. Après le règlement, vous êtes recontacté sous 24h pour confirmer votre rendez-vous. Annulation possible jusqu'à 24h avant.",
     }),
   ],
   preview: {prepare: () => ({title: 'Page Reserver'})},

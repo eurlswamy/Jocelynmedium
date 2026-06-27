@@ -19,12 +19,12 @@ export default defineType({
       group: 'frise',
       of: [defineArrayMember({type: 'string'})],
       initialValue: [
-        'Debut, Prix presse a Marseille',
+        'Début, Prix presse à Marseille',
         'Prix meilleur voyant, Grenoble',
-        'Prix meilleur voyant medium, Creteil',
-        'Festival de Cannes, deux editions',
-        'Emission hebdo, Tele Kreol',
-        'Medium et coach, Saint-Clotilde',
+        'Prix meilleur voyant médium, Créteil',
+        'Festival de Cannes, deux éditions',
+        'Émission hebdo, Télé Kreol',
+        'Médium et coach, Saint-Clotilde',
       ],
     }),
     defineField({
@@ -42,7 +42,7 @@ export default defineType({
       type: 'text',
       rows: 2,
       group: 'bio',
-      initialValue: "On n'echappe pas a son destin mediatique.",
+      initialValue: "On n'échappe pas à son destin médiatique.",
     }),
     defineField({
       name: 'croyancesTitre',
@@ -68,9 +68,9 @@ export default defineType({
         }),
       ],
       initialValue: [
-        {titre: 'Precision', texte: 'Des elements verifiables, pas des banalites.'},
-        {titre: 'Honnetete', texte: 'Je dis ce que je vois. Ni plus, ni moins.'},
-        {titre: 'Liberte', texte: "Rien n'est fige. Vos choix restent les votres."},
+        {titre: 'Précision', texte: 'Des éléments vérifiables, pas des banalités.'},
+        {titre: 'Honnêteté', texte: 'Je dis ce que je vois. Ni plus, ni moins.'},
+        {titre: 'Liberté', texte: "Rien n'est figé. Vos choix restent les vôtres."},
       ],
     }),
     defineField({
@@ -78,14 +78,14 @@ export default defineType({
       title: 'Surtitre (section Coaching)',
       type: 'string',
       group: 'coaching',
-      initialValue: 'Une demarche complementaire',
+      initialValue: 'Une démarche complémentaire',
     }),
     defineField({
       name: 'coachingTitre',
       title: 'Titre (section Coaching)',
       type: 'string',
       group: 'coaching',
-      initialValue: 'Coach de vie et developpement personnel.',
+      initialValue: 'Coach de vie et développement personnel.',
     }),
     defineField({
       name: 'coachingTitreItalique',
@@ -126,9 +126,9 @@ export default defineType({
         }),
       ],
       initialValue: [
-        {titre: 'Ecoute sans jugement', texte: ''},
+        {titre: 'Écoute sans jugement', texte: ''},
         {titre: 'Objectifs concrets', texte: ''},
-        {titre: 'Complementaire a la voyance', texte: ''},
+        {titre: 'Complémentaire à la voyance', texte: ''},
       ],
     }),
   ],

@@ -23,7 +23,7 @@ export default defineType({
       description: "S'affiche dans le bloc d'appel final, en bas des pages, au-dessus du grand titre.",
       type: 'string',
       group: 'seuil',
-      initialValue: 'Pret a franchir le seuil',
+      initialValue: 'Prêt à franchir le seuil',
     }),
     defineField({
       name: 'seuilTitre',
@@ -39,7 +39,7 @@ export default defineType({
       description: 'Deuxieme ligne du grand titre, affichee en italique et en dore.',
       type: 'string',
       group: 'seuil',
-      initialValue: 'ou pret a reserver ?',
+      initialValue: 'ou prêt à réserver ?',
     }),
     defineField({
       name: 'seuilDescription',
@@ -49,7 +49,7 @@ export default defineType({
       rows: 3,
       group: 'seuil',
       initialValue:
-        "Posez-moi votre question par email, ou reservez directement votre creneau. Vous etes recontacte sous 24h pour confirmer, annulation possible jusqu'a 24h avant le rendez-vous.",
+        "Posez-moi votre question par email, ou réservez directement votre créneau. Vous êtes recontacté sous 24h pour confirmer, annulation possible jusqu'à 24h avant le rendez-vous.",
     }),
     defineField({
       name: 'seuilCtaReserver',
@@ -57,7 +57,7 @@ export default defineType({
       description: 'Libelle du bouton dore qui mene vers la reservation.',
       type: 'string',
       group: 'seuil',
-      initialValue: 'Reserver une consultation',
+      initialValue: 'Réserver une consultation',
     }),
     defineField({
       name: 'seuilCtaQuestion',
@@ -73,7 +73,7 @@ export default defineType({
       description: "Premiere des trois petites mentions affichees sous les boutons.",
       type: 'string',
       group: 'seuil',
-      initialValue: 'Paiement securise par Stripe',
+      initialValue: 'Paiement sécurisé par Stripe',
     }),
     defineField({
       name: 'seuilMention2',
@@ -89,7 +89,7 @@ export default defineType({
       description: 'Troisieme des trois petites mentions affichees sous les boutons.',
       type: 'string',
       group: 'seuil',
-      initialValue: 'Confidentialite absolue',
+      initialValue: 'Confidentialité absolue',
     }),
 
     // CITATION MANIFESTE, affichee sur la page d'accueil.
@@ -100,7 +100,7 @@ export default defineType({
       type: 'text',
       rows: 3,
       group: 'antiCliches',
-      initialValue: 'Je ne vends pas de reves. Des faits verifiables',
+      initialValue: 'Je ne vends pas de rêves. Des faits vérifiables',
     }),
     defineField({
       name: 'antiClichesCitationItalique',
@@ -108,7 +108,7 @@ export default defineType({
       description: 'Partie de la citation affichee en italique et en dore, au milieu de la phrase.',
       type: 'string',
       group: 'antiCliches',
-      initialValue: 'au moment meme de la seance.',
+      initialValue: 'au moment même de la séance.',
     }),
     defineField({
       name: 'antiClichesSuite',
@@ -116,7 +116,7 @@ export default defineType({
       description: 'Fin de la citation, affichee apres la partie en italique.',
       type: 'string',
       group: 'antiCliches',
-      initialValue: 'Pas de sorts, pas de mise en scene, pas de dependance.',
+      initialValue: 'Pas de sorts, pas de mise en scène, pas de dépendance.',
     }),
     defineField({
       name: 'antiClichesAuteur',
@@ -124,7 +124,7 @@ export default defineType({
       description: 'Nom affiche sous la citation.',
       type: 'string',
       group: 'antiCliches',
-      initialValue: 'Jocelyn Amir Swamy, Medium voyant',
+      initialValue: 'Jocelyn Amir Swamy, Médium voyant',
     }),
     defineField({
       name: 'antiClichesCta1',
@@ -160,7 +160,7 @@ export default defineType({
       rows: 3,
       group: 'footer',
       initialValue:
-        'Medium voyant a La Reunion. Clairvoyance, clairaudience, tirage de cartes et voyance sur photo. Au cabinet a Saint-Clotilde ou a distance.',
+        'Médium voyant à La Réunion. Clairvoyance, clairaudience, tirage de cartes et voyance sur photo. Au cabinet à Saint-Clotilde ou à distance.',
     }),
     defineField({
       name: 'footerContactTitre',
@@ -184,7 +184,7 @@ export default defineType({
       description: 'Region affichee sous la ville dans le pied de page.',
       type: 'string',
       group: 'footer',
-      initialValue: 'La Reunion (974)',
+      initialValue: 'La Réunion (974)',
     }),
     defineField({
       name: 'footerTelephone',
@@ -216,7 +216,7 @@ export default defineType({
       description: 'Texte de la ligne television dans la colonne medias.',
       type: 'string',
       group: 'footer',
-      initialValue: 'Tele Kreol, mercredis 19h30',
+      initialValue: 'Télé Kreol, mercredis 19h30',
     }),
     defineField({
       name: 'footerRadio',
@@ -241,7 +241,7 @@ export default defineType({
         "Ligne de copyright en bas du pied de page. Ecrivez {annee} la ou l'annee en cours doit apparaitre automatiquement.",
       type: 'string',
       group: 'footer',
-      initialValue: '{annee} Jocelyn Amir. Tous droits reserves.',
+      initialValue: '{annee} Jocelyn Amir. Tous droits réservés.',
     }),
     defineField({
       name: 'footerCredit',
@@ -249,7 +249,7 @@ export default defineType({
       description: 'Ligne tout en bas indiquant qui a cree le site.',
       type: 'string',
       group: 'footer',
-      initialValue: 'Cree par Fondationstudio.fr',
+      initialValue: 'Créé par Fondationstudio.fr',
     }),
   ],
   preview: {prepare: () => ({title: 'Textes communs (CTA, pied de page)'})},

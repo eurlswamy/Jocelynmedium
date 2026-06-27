@@ -24,7 +24,7 @@ export default defineType({
       title: 'Message quand aucun article',
       description: 'Texte affiche quand la categorie ne contient aucun article.',
       type: 'string',
-      initialValue: 'Aucun article dans cette categorie.',
+      initialValue: 'Aucun article dans cette catégorie.',
     }),
     defineField({
       name: 'labelAutresArticles',

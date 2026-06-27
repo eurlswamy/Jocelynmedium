@@ -9,13 +9,13 @@ export default defineType({
       name: 'surtitre',
       title: 'Surtitre de la page',
       type: 'string',
-      initialValue: 'Reservation, 30 minutes par telephone',
+      initialValue: 'Réservation, 30 minutes par téléphone',
     }),
     defineField({
       name: 'titre',
       title: 'Titre de la page',
       type: 'string',
-      initialValue: 'Confirmez et reglez votre seance',
+      initialValue: 'Confirmez et réglez votre séance',
     }),
     defineField({
       name: 'descriptionPaiement',
@@ -23,19 +23,19 @@ export default defineType({
       type: 'text',
       rows: 3,
       initialValue:
-        "Le paiement securise valide votre rendez-vous. Vous indiquez vos coordonnees au moment du reglement, Jocelyn vous appelle a l'heure convenue.",
+        "Le paiement sécurisé valide votre rendez-vous. Vous indiquez vos coordonnées au moment du règlement, Jocelyn vous appelle à l'heure convenue.",
     }),
     defineField({
       name: 'labelFormule',
       title: 'Libelle de la formule',
       type: 'string',
-      initialValue: 'Formule selectionnee',
+      initialValue: 'Formule sélectionnée',
     }),
     defineField({
       name: 'detailFormule',
       title: 'Detail de la formule',
       type: 'string',
-      initialValue: 'Par telephone (30 minutes)',
+      initialValue: 'Par téléphone (30 minutes)',
     }),
     defineField({
       name: 'features',
@@ -43,10 +43,10 @@ export default defineType({
       type: 'array',
       of: [defineArrayMember({type: 'string'})],
       initialValue: [
-        'Consultation de 30 minutes par telephone',
-        "Jocelyn vous appelle a l'heure du rendez-vous",
-        'Memes methodes que le cabinet, en condense',
-        'Aucun deplacement, ou que vous soyez',
+        'Consultation de 30 minutes par téléphone',
+        "Jocelyn vous appelle à l'heure du rendez-vous",
+        'Mêmes méthodes que le cabinet, en condensé',
+        'Aucun déplacement, où que vous soyez',
       ],
     }),
     defineField({

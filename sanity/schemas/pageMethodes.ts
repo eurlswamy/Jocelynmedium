@@ -15,7 +15,7 @@ export default defineType({
       title: 'Surtitre de la banniere',
       type: 'string',
       group: 'hero',
-      initialValue: 'Methodes de travail',
+      initialValue: 'Méthodes de travail',
     }),
     defineField({
       name: 'heroTitre',
@@ -37,7 +37,7 @@ export default defineType({
       type: 'text',
       rows: 2,
       group: 'hero',
-      initialValue: 'Cliquez sur une methode pour en decouvrir le fonctionnement.',
+      initialValue: 'Cliquez sur une méthode pour en découvrir le fonctionnement.',
     }),
     defineField({
       name: 'methodes',
@@ -70,7 +70,7 @@ export default defineType({
           teaser: 'Je vois.',
           titre: 'Clairvoyance',
           definition:
-            "La capacite a percevoir des images, des scenes et des flashs visuels lies au passe, au present ou a l'avenir.",
+            "La capacité à percevoir des images, des scènes et des flashs visuels liés au passé, au présent ou à l'avenir.",
           description: '',
           exemples: [],
         },
@@ -107,7 +107,7 @@ export default defineType({
       rows: 3,
       group: 'citation',
       initialValue:
-        "Je ne choisis pas d'utiliser une methode plutot qu'une autre. Elles s'activent naturellement, selon ce que la seance demande.",
+        "Je ne choisis pas d'utiliser une méthode plutôt qu'une autre. Elles s'activent naturellement, selon ce que la séance demande.",
     }),
     defineField({
       name: 'citationAuteur',

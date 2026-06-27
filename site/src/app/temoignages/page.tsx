@@ -162,67 +162,7 @@ export default async function MediasPressePage() {
         <div aria-hidden className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-or-doux/30 to-transparent" />
       </section>
 
-      {/* Emissions a revoir : cartes liees aux videos Facebook (preuve sociale).
-          Liens ouverts dans un nouvel onglet, aucun script tiers charge. */}
-      <section className="bg-ivoire py-16 md:py-20">
-        <div className="max-w-6xl mx-auto px-6 md:px-12">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <p className="font-sans text-xs tracking-[0.45em] uppercase text-encre/40 mb-3">
-              {pick(p?.videosSurtitre as string | undefined, "À revoir en vidéo")}
-            </p>
-            <h2 className="font-serif text-3xl md:text-4xl text-encre leading-tight">
-              {pick(p?.videosTitre as string | undefined, "Jocelyn à la télévision")}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {videos.map((v, i) => (
-              <a
-                key={i}
-                href={v.lien}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative flex flex-col rounded-2xl overflow-hidden border border-encre/12 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-bleu-majorelle/40 hover:shadow-xl"
-              >
-                {/* Vignette : bandeau couleur + bouton lecture (pas de miniature
-                    Facebook pour eviter tout script tiers). */}
-                <div
-                  className="relative aspect-video flex items-center justify-center"
-                  style={{ background: "linear-gradient(135deg, #1B7A8F 0%, #0B1929 100%)" }}
-                >
-                  <span className="flex items-center justify-center w-16 h-16 rounded-full bg-white/15 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                    <Play size={26} strokeWidth={1.8} className="text-ivoire ml-1" fill="currentColor" />
-                  </span>
-                  <span className="absolute top-3 left-3 font-sans text-[10px] tracking-[0.2em] uppercase text-ivoire/80 bg-black/25 rounded-full px-3 py-1">
-                    Vidéo
-                  </span>
-                </div>
-
-                <div className="flex flex-col flex-1 p-5">
-                  <h3 className="font-serif text-lg text-encre leading-snug mb-1.5">
-                    {v.titre || "Émission à revoir"}
-                  </h3>
-                  {v.description ? (
-                    <p className="font-sans text-encre/60 text-sm leading-relaxed mb-4">
-                      {v.description}
-                    </p>
-                  ) : null}
-                  <span className="mt-auto inline-flex items-center gap-2 font-sans text-[12px] tracking-[0.12em] uppercase text-bleu-majorelle">
-                    Voir l&apos;émission
-                    <ArrowRight size={14} strokeWidth={2} className="transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
-                </div>
-              </a>
-            ))}
-          </div>
-
-          <p className="text-center font-sans text-encre/40 text-[11px] mt-6">
-            Les vidéos s&apos;ouvrent sur Facebook dans un nouvel onglet.
-          </p>
-        </div>
-      </section>
-
-      {/* Festival de Cannes */}
+      {/* Presence nationale */}
       <section className="bg-ivoire py-14 md:py-18">
         <div className="max-w-6xl mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -238,6 +178,35 @@ export default async function MediasPressePage() {
               <div className="flex items-center gap-3">
                 <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-encre/40 px-3 py-1 border border-encre/15 rounded-full">2000</span>
                 <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-encre/40 px-3 py-1 border border-encre/15 rounded-full">2001</span>
+              </div>
+
+              {/* Emissions a revoir : liens discrets vers les videos Facebook
+                  (preuve sociale, ouverts dans un nouvel onglet). */}
+              <div className="mt-7 pt-6 border-t border-encre/10">
+                <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-encre/40 mb-3">
+                  {pick(p?.videosSurtitre as string | undefined, "À revoir en vidéo")}
+                </p>
+                <ul className="space-y-1">
+                  {videos.map((v, i) => (
+                    <li key={i}>
+                      <a
+                        href={v.lien}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-2.5 py-1.5 font-sans text-sm text-encre/75 hover:text-bleu-majorelle transition-colors"
+                      >
+                        <Play size={13} strokeWidth={2} fill="currentColor" className="text-bleu-majorelle shrink-0" />
+                        <span className="underline-offset-4 group-hover:underline">
+                          {v.titre || "Émission à revoir"}
+                        </span>
+                        <ArrowRight size={13} strokeWidth={2} className="text-encre/30 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-bleu-majorelle" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p className="font-sans text-encre/35 text-[11px] mt-3">
+                  Les vidéos s&apos;ouvrent sur Facebook dans un nouvel onglet.
+                </p>
               </div>
             </div>
             {/* Photo : Jocelyn à la télévision (cohérent avec « passe à la télé ») */}

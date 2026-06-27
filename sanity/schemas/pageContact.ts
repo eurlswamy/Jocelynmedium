@@ -23,7 +23,7 @@ export default defineType({
       title: "Titre de l'en-tete",
       type: 'string',
       group: 'entete',
-      initialValue: 'Ecrivez a Jocelyn.',
+      initialValue: 'Écrivez à Jocelyn.',
     }),
     defineField({
       name: 'enteteTitreItalique',
@@ -39,14 +39,14 @@ export default defineType({
       rows: 2,
       group: 'entete',
       initialValue:
-        'Une question avant de reserver ? Reponse sous 24h. La reservation, elle, se fait en ligne.',
+        'Une question avant de réserver ? Réponse sous 24h. La réservation, elle, se fait en ligne.',
     }),
     defineField({
       name: 'reservationSurtitre',
       title: 'Surtitre (reservation rapide)',
       type: 'string',
       group: 'reservation',
-      initialValue: 'Reserver maintenant',
+      initialValue: 'Réserver maintenant',
     }),
     defineField({
       name: 'reservationTitre',
@@ -60,14 +60,14 @@ export default defineType({
       title: 'Option 1',
       type: 'string',
       group: 'reservation',
-      initialValue: 'Une heure, cabinet ou a distance, 120 euros',
+      initialValue: 'Une heure, cabinet ou à distance, 120 euros',
     }),
     defineField({
       name: 'reservationOption2',
       title: 'Option 2',
       type: 'string',
       group: 'reservation',
-      initialValue: '30 min, par telephone, 85 euros',
+      initialValue: '30 min, par téléphone, 85 euros',
     }),
     defineField({
       name: 'coordEmail',
@@ -95,14 +95,14 @@ export default defineType({
       title: 'Region',
       type: 'string',
       group: 'coordonnees',
-      initialValue: 'La Reunion (974)',
+      initialValue: 'La Réunion (974)',
     }),
     defineField({
       name: 'confidentialiteTitre',
       title: 'Titre (confidentialite)',
       type: 'string',
       group: 'confidentialite',
-      initialValue: 'Confidentialite garantie.',
+      initialValue: 'Confidentialité garantie.',
     }),
     defineField({
       name: 'confidentialiteTexte',
@@ -111,7 +111,7 @@ export default defineType({
       rows: 2,
       group: 'confidentialite',
       initialValue:
-        "Tout ce que vous partagez reste strictement entre nous. Aucune information n'est transmise a un tiers.",
+        "Tout ce que vous partagez reste strictement entre nous. Aucune information n'est transmise à un tiers.",
     }),
   ],
   preview: {prepare: () => ({title: 'Page Contact'})},

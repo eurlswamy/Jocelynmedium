@@ -25,14 +25,14 @@ export default defineType({
       title: 'Titre de la page',
       type: 'string',
       group: 'entete',
-      initialValue: 'Presence mediatique',
+      initialValue: 'Présence médiatique',
     }),
     defineField({
       name: 'titreItalique',
       title: 'Titre en italique',
       type: 'string',
       group: 'entete',
-      initialValue: 'reguliere.',
+      initialValue: 'régulière.',
     }),
     defineField({
       name: 'medias',
@@ -56,19 +56,19 @@ export default defineType({
       initialValue: [
         {
           label: 'TV',
-          nom: 'Tele Kreol',
+          nom: 'Télé Kreol',
           description:
-            'En direct depuis 2010, Jocelyn repond aux questions des telespectateurs reunionnais sur la mediumnite et la voyance.',
+            'En direct depuis 2010, Jocelyn répond aux questions des téléspectateurs réunionnais sur la médiumnité et la voyance.',
           frequence: 'Chaque mercredi',
-          lieu: '19h30, La Reunion',
+          lieu: '19h30, La Réunion',
         },
         {
           label: 'Radio',
           nom: 'Kreol FM',
           description:
-            'Des emissions consacrees a la spiritualite, aux traditions reunionnaises et a la voyance.',
-          frequence: 'Interventions regulieres',
-          lieu: 'La Reunion',
+            'Des émissions consacrées à la spiritualité, aux traditions réunionnaises et à la voyance.',
+          frequence: 'Interventions régulières',
+          lieu: 'La Réunion',
         },
       ],
     }),
@@ -77,7 +77,7 @@ export default defineType({
       title: 'Surtitre du bloc videos',
       type: 'string',
       group: 'videos',
-      initialValue: 'A revoir en video',
+      initialValue: 'À revoir en vidéo',
     }),
     defineField({
       name: 'videosTitre',
@@ -85,7 +85,7 @@ export default defineType({
       description: 'Affiche au-dessus des cartes video (ex : Jocelyn a la television).',
       type: 'string',
       group: 'videos',
-      initialValue: 'Jocelyn a la television',
+      initialValue: 'Jocelyn à la télévision',
     }),
     defineField({
       name: 'videos',
@@ -121,23 +121,23 @@ export default defineType({
       ],
       initialValue: [
         {
-          titre: 'Jocelyn en direct a la television',
-          description: 'Emission en direct sur les reseaux de Jocelyn.',
+          titre: 'Jocelyn en direct à la télévision',
+          description: 'Émission en direct à revoir.',
           lien: 'https://www.facebook.com/share/v/19EXTwkeGN/',
         },
         {
-          titre: 'Rediffusion : passage televise',
-          description: 'Un de ses passages a revoir.',
+          titre: 'Rediffusion : passage télévisé',
+          description: 'Un de ses passages à revoir.',
           lien: 'https://www.facebook.com/share/v/1BQRfTSB5p/',
         },
         {
-          titre: 'Jocelyn a l antenne',
-          description: 'Une autre emission a revoir.',
+          titre: "Jocelyn à l'antenne",
+          description: 'Une autre émission à revoir.',
           lien: 'https://www.facebook.com/share/v/1LJXM3pND9/',
         },
         {
-          titre: 'Jocelyn a la television',
-          description: 'Un passage televise a revoir.',
+          titre: 'Jocelyn à la télévision',
+          description: 'Un passage télévisé à revoir.',
           lien: 'https://www.facebook.com/share/v/18jez5wTEu/',
         },
       ],
@@ -147,7 +147,7 @@ export default defineType({
       title: 'Surtitre (presence nationale)',
       type: 'string',
       group: 'nationale',
-      initialValue: 'Presence nationale',
+      initialValue: 'Présence nationale',
     }),
     defineField({
       name: 'nationaleTitre',
@@ -161,7 +161,7 @@ export default defineType({
       title: 'Titre en italique (presence nationale)',
       type: 'string',
       group: 'nationale',
-      initialValue: 'aux plateaux tele.',
+      initialValue: 'aux plateaux télé.',
     }),
     defineField({
       name: 'nationaleDescription',
@@ -170,7 +170,7 @@ export default defineType({
       rows: 3,
       group: 'nationale',
       initialValue:
-        "Present au Festival de Cannes en 2000 et 2001, une reconnaissance nationale de sa pratique. Aujourd'hui, Jocelyn continue de passer regulierement a la television.",
+        "Présent au Festival de Cannes en 2000 et 2001, une reconnaissance nationale de sa pratique. Aujourd'hui, Jocelyn continue de passer régulièrement à la télévision.",
     }),
     defineField({
       name: 'distinctions',
@@ -190,9 +190,9 @@ export default defineType({
         }),
       ],
       initialValue: [
-        {annee: '1994', label: 'Prix de la presse et des medias', lieu: 'Marseille'},
+        {annee: '1994', label: 'Prix de la presse et des médias', lieu: 'Marseille'},
         {annee: '1996', label: 'Prix du public du meilleur voyant', lieu: 'Grenoble'},
-        {annee: '1997', label: 'Prix du meilleur voyant medium', lieu: 'Creteil'},
+        {annee: '1997', label: 'Prix du meilleur voyant médium', lieu: 'Créteil'},
         {annee: '2000', label: 'Festival de Cannes', lieu: 'Cannes'},
         {annee: '2001', label: '2e Festival de Cannes', lieu: 'Cannes'},
       ],
@@ -209,7 +209,7 @@ export default defineType({
       title: 'Texte du bouton 2',
       type: 'string',
       group: 'cta',
-      initialValue: 'Reserver',
+      initialValue: 'Réserver',
     }),
   ],
   preview: {prepare: () => ({title: 'Page Medias et presse'})},
