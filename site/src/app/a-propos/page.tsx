@@ -161,9 +161,15 @@ export default async function AProposPage() {
         </div>
       </section>
 
-      {/* Coaching de vie - version courte */}
-      <section className="relative py-14 md:py-18 overflow-hidden" style={{ backgroundColor: "var(--color-blanc-casse)" }}>
-        <div aria-hidden className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-or-doux to-transparent opacity-40" />
+      {/* Coaching de vie - version courte. Fond teinte terre-cuite (couleur
+          d'accent de la section) pour la distinguer nettement de la section bio
+          au-dessus, qui est en ivoire. */}
+      <section
+        className="relative py-14 md:py-18 overflow-hidden"
+        style={{ background: "linear-gradient(165deg, #F4E3D8 0%, #EFD7C7 100%)" }}
+      >
+        <div aria-hidden className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-terre-cuite to-transparent opacity-50" />
+        <div aria-hidden className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-terre-cuite to-transparent opacity-50" />
 
         <div className="relative max-w-6xl mx-auto px-6 md:px-12">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
