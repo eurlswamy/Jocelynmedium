@@ -576,13 +576,13 @@ export function HeroParallax({ content }: { content?: HeroContent } = {}) {
             <div className="flex flex-col gap-3 px-2 w-full">
               <Link
                 href="/reserver"
-                className="inline-flex items-center justify-center w-full h-12 px-6 rounded-full bg-or-doux text-encre font-medium text-sm tracking-wide hover:bg-or-clair transition-all duration-300"
+                className="inline-flex items-center justify-center w-full h-12 px-6 rounded-full bg-or-doux text-encre font-medium text-sm tracking-wide whitespace-nowrap hover:bg-or-clair transition-all duration-300"
               >
                 {heroCta1}
               </Link>
               <Link
                 href="/a-propos"
-                className="inline-flex items-center justify-center w-full h-12 px-6 rounded-full border border-white/30 text-ivoire bg-white/10 backdrop-blur-xl font-medium text-sm tracking-wide shadow-[0_8px_32px_-8px_rgba(0,0,0,0.6)] transition-all duration-300"
+                className="inline-flex items-center justify-center w-full h-12 px-6 rounded-full border border-white/30 text-ivoire bg-white/10 backdrop-blur-xl font-medium text-sm tracking-wide whitespace-nowrap shadow-[0_8px_32px_-8px_rgba(0,0,0,0.6)] transition-all duration-300"
               >
                 {val(content?.heroCta2, "Découvrir mon parcours")}
               </Link>
@@ -626,16 +626,16 @@ export function HeroParallax({ content }: { content?: HeroContent } = {}) {
                 {heroDescription}
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-4">
                 <Link
                   href="/reserver"
-                  className="inline-flex items-center justify-center h-14 px-8 rounded-full bg-or-doux text-encre font-medium text-base tracking-wide hover:bg-or-clair hover:shadow-lg hover:shadow-or-doux/30 transition-all duration-300"
+                  className="inline-flex shrink-0 items-center justify-center h-14 px-8 rounded-full bg-or-doux text-encre font-medium text-base tracking-wide whitespace-nowrap hover:bg-or-clair hover:shadow-lg hover:shadow-or-doux/30 transition-all duration-300"
                 >
                   {heroCta1}
                 </Link>
                 <Link
                   href="/a-propos"
-                  className="inline-flex items-center justify-center h-14 px-8 rounded-full border border-or-doux/40 text-ivoire bg-encre/30 backdrop-blur-md font-medium text-base tracking-wide hover:bg-encre/50 hover:border-or-doux/70 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)] transition-all duration-300"
+                  className="inline-flex shrink-0 items-center justify-center h-14 px-8 rounded-full border border-or-doux/40 text-ivoire bg-encre/30 backdrop-blur-md font-medium text-base tracking-wide whitespace-nowrap hover:bg-encre/50 hover:border-or-doux/70 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)] transition-all duration-300"
                 >
                   {heroCta2}
                 </Link>
@@ -650,7 +650,7 @@ export function HeroParallax({ content }: { content?: HeroContent } = {}) {
             flouter la vidéo derrière via backdrop-filter. */}
         <div
           ref={introLayerRef}
-          className="absolute inset-0 flex items-center justify-center opacity-0"
+          className="absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none"
         >
           {/* MOBILE : vraie carte verre dépoli */}
           <div className="md:hidden w-full px-5 py-10">
@@ -921,7 +921,7 @@ export function HeroParallax({ content }: { content?: HeroContent } = {}) {
         {/* ═══════ LAYER 3 : Services ═══════ */}
         <div
           ref={servicesLayerRef}
-          className="absolute inset-0 z-30 flex items-center justify-center opacity-0"
+          className="absolute inset-0 z-30 flex items-center justify-center opacity-0 pointer-events-none"
         >
           {/* MOBILE : swipeable horizontal, cards riches */}
           <div className="md:hidden w-full py-4">
