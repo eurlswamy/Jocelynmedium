@@ -12,20 +12,63 @@ const VISIBLE_THRESHOLD_COUNT = 10;
 
 type FrameStore = {
   frames: HTMLImageElement[];
-  bitmaps: (ImageBitmap | null)[];
   ready: boolean;
   onFrameLoaded?: (index: number) => void;
 };
 
 export const frameStore: FrameStore = {
   frames: new Array(FRAME_COUNT),
-  bitmaps: new Array(FRAME_COUNT).fill(null),
   ready: false,
 };
 
 export function isFrameReady(index: number): boolean {
   const img = frameStore.frames[index];
   return !!(img && img.complete && img.naturalWidth > 0);
+}
+
+// ─── Fenêtre glissante de décodage ───────────────────────────────────────────
+// Une frame desktop décodée coûte 1280x720x4 = 3,5 Mo en mémoire, quel que soit
+// son poids compressé sur disque. Garder les 193 frames décodées simultanément
+// représentait ~680 Mo retenus en permanence : au-delà de ce que le process GPU
+// peut allouer sur une machine modeste, d'où le crash intermittent de l'onglet
+// (STATUS_ACCESS_VIOLATION) pendant le scroll.
+//
+// On ne garde donc décodées que les frames proches de la position de scroll.
+// Vider img.src libère la copie décodée mais laisse le fichier dans le cache
+// HTTP du navigateur : le redécodage est quasi instantané et sans requête
+// réseau. WINDOW couvre largement un scroll rapide dans les deux sens.
+const WINDOW = 40;
+
+// URL d'origine de chaque frame, pour pouvoir la recharger après libération.
+const frameSrc: string[] = new Array(FRAME_COUNT);
+let windowCenter = -1;
+
+export function setActiveFrame(index: number) {
+  if (windowCenter === index) return;
+  const previous = windowCenter;
+  windowCenter = index;
+
+  const lo = Math.max(0, index - WINDOW);
+  const hi = Math.min(FRAME_COUNT - 1, index + WINDOW);
+
+  // Recharge les frames entrées dans la fenêtre (depuis le cache HTTP).
+  for (let i = lo; i <= hi; i++) {
+    const img = frameStore.frames[i];
+    const src = frameSrc[i];
+    if (img && src && !img.src) img.src = src;
+  }
+
+  // Libère celles qui viennent d'en sortir. On ne parcourt que l'ancienne
+  // fenêtre plutôt que les 193 frames : au premier appel (previous < 0) on
+  // balaie tout une seule fois pour libérer le chargement initial.
+  const from = previous < 0 ? 0 : Math.max(0, previous - WINDOW);
+  const to = previous < 0 ? FRAME_COUNT - 1 : Math.min(FRAME_COUNT - 1, previous + WINDOW);
+  for (let i = from; i <= to; i++) {
+    if (i >= lo && i <= hi) continue;
+    const img = frameStore.frames[i];
+    // Vider src libère la copie décodée ; le fichier reste en cache HTTP.
+    if (img && img.src) img.src = "";
+  }
 }
 
 export function FrameLoader() {
@@ -94,21 +137,23 @@ export function FrameLoader() {
       const img = new window.Image();
       const frameIndex = i - 1;
       img.onload = () => {
-        // Sur mobile on évite createImageBitmap : décoder et garder 48 bitmaps
-        // en mémoire provoquait des saccades / un gel de l'animation. On dessine
-        // directement l'élément <img>, qui est déjà décodé après onload.
-        if (!isMobile && typeof createImageBitmap !== "undefined") {
-          createImageBitmap(img).then((bmp) => {
-            frameStore.bitmaps[frameIndex] = bmp;
-          }).catch(() => {});
-        }
+        // On ne crée PLUS d'ImageBitmap. createImageBitmap produisait une 2e
+        // copie décodée (GPU) de chaque frame, en plus de celle déjà détenue par
+        // l'élément <img>, sans jamais appeler .close() : 193 x 1280x720x4 octets
+        // x 2 = ~1,3 Go de mémoire image retenue sur desktop. Au-delà de ce que
+        // le process GPU peut allouer -> crash de l'onglet
+        // (STATUS_ACCESS_VIOLATION) de façon intermittente pendant le scroll.
+        // L'élément <img> est déjà décodé après onload et drawImage l'accepte
+        // directement : rendu identique, mémoire divisée par deux.
         handleProgress(frameIndex);
       };
       img.onerror = () => handleProgress(frameIndex);
       if (order < VISIBLE_THRESHOLD_COUNT) {
         img.fetchPriority = "high";
       }
-      img.src = pathFn(i);
+      const url = pathFn(i);
+      frameSrc[frameIndex] = url;
+      img.src = url;
       frameStore.frames[frameIndex] = img;
     });
 

@@ -17,7 +17,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { frameStore, isFrameReady } from "./FrameLoader";
+import { frameStore, isFrameReady, setActiveFrame } from "./FrameLoader";
 
 const EASE_LUXE = [0.22, 1, 0.36, 1] as const;
 
@@ -137,24 +137,27 @@ export function HeroParallax({ content }: { content?: HeroContent } = {}) {
     // de frame entière, on passe d'un dessin continu coûteux à ~193 dessins
     // discrets sur tout le scroll : nettement plus fluide, rendu identique.
     const target = Math.round(targetFloat);
+    // Déclare la position courante pour que FrameLoader garde décodées les
+    // frames voisines et libère les autres (voir WINDOW dans FrameLoader).
+    setActiveFrame(target);
     const best = findClosestLoadedFrame(target);
     if (best < 0) return;
     // `force` : redessine même si la frame est identique (repaint après un
     // canvas vidé hors écran, resize, retour de visibilité).
     if (!force && best === drawnFrameRef.current) return;
 
-    const src = frameStore.bitmaps[best] ?? frameStore.frames[best];
+    const src = frameStore.frames[best];
     if (!src) return;
 
     const cw = canvas.width;
     const ch = canvas.height;
-    const iw = src instanceof ImageBitmap ? src.width : src.naturalWidth;
-    const ih = src instanceof ImageBitmap ? src.height : src.naturalHeight;
+    const iw = src.naturalWidth;
+    const ih = src.naturalHeight;
     if (!iw || !ih) return;
     const scale = Math.max(cw / iw, ch / ih);
     const dw = iw * scale;
     const dh = ih * scale;
-    ctx.drawImage(src as CanvasImageSource, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    ctx.drawImage(src, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
 
     drawnFrameRef.current = best;
   };
