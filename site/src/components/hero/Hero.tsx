@@ -167,10 +167,10 @@ export function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4 items-center md:items-start justify-center md:justify-start">
-              <Button variant="gold" size="lg">
+              <Button variant="gold" size="lg" href="/reserver">
                 Réserver une consultation
               </Button>
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" href="/a-propos">
                 Découvrir mon parcours
               </Button>
             </div>
