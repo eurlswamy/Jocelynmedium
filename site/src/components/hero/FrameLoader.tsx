@@ -36,8 +36,14 @@ export function isFrameReady(index: number): boolean {
 // On ne garde donc décodées que les frames proches de la position de scroll.
 // Vider img.src libère la copie décodée mais laisse le fichier dans le cache
 // HTTP du navigateur : le redécodage est quasi instantané et sans requête
-// réseau. WINDOW couvre largement un scroll rapide dans les deux sens.
-const WINDOW = 40;
+// réseau. La fenêtre couvre largement un scroll rapide dans les deux sens.
+//
+// Taille par défaut : +/- 24 frames (49 décodées, ~170 Mo sur desktop). Réduite
+// sur les machines à faible mémoire (voir FrameLoader) pour rester très loin du
+// seuil où le process GPU est tué.
+const WINDOW_DEFAULT = 24;
+const WINDOW_LOW_MEMORY = 16;
+let WINDOW = WINDOW_DEFAULT;
 
 // URL d'origine de chaque frame, pour pouvoir la recharger après libération.
 const frameSrc: string[] = new Array(FRAME_COUNT);
@@ -66,6 +72,9 @@ export function setActiveFrame(index: number) {
   for (let i = from; i <= to; i++) {
     if (i >= lo && i <= hi) continue;
     const img = frameStore.frames[i];
+    // Une frame sans URL enregistrée dans frameSrc est épinglée (mode
+    // « réduire les animations » : l'unique frame ne doit jamais être libérée).
+    if (!frameSrc[i]) continue;
     // Vider src libère la copie décodée ; le fichier reste en cache HTTP.
     if (img && img.src) img.src = "";
   }
@@ -82,18 +91,35 @@ export function FrameLoader() {
     const isMobile = window.innerWidth < 768;
     const pathFn = isMobile ? MOBILE_FRAME_PATH : DESKTOP_FRAME_PATH;
 
-    // Sur mobile, on ne charge qu'une frame sur STEP pour alléger le
-    // téléchargement et la mémoire. STEP = 3 (~64 frames, ~7-8 Mo) plutôt que 4 :
-    // un tiers de frames en plus rend l'animation nettement plus fluide au scroll
-    // pour un surcoût de poids modéré. drawFrame() retombe sur la frame chargée la
-    // plus proche, donc pas de trou même entre deux frames intermédiaires.
-    const STEP = isMobile ? 3 : 1;
+    // Machine à faible mémoire (navigator.deviceMemory, en Go, plafonné à 8 par
+    // les navigateurs ; absent sur Safari/Firefox -> on suppose confortable).
+    // Sur ces machines on charge moitié moins de frames et on resserre la
+    // fenêtre de décodage : l'animation reste fluide (drawFrame retombe sur la
+    // frame chargée la plus proche) et la mémoire image reste sous ~60 Mo.
+    const deviceMemory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
+    const lowMemory = typeof deviceMemory === "number" && deviceMemory <= 4;
+    WINDOW = lowMemory ? WINDOW_LOW_MEMORY : WINDOW_DEFAULT;
+
+    // Préférence système « réduire les animations » : on ne charge que la
+    // première frame. Le héros affiche alors une image fixe, sans séquence,
+    // et aucune mémoire n'est consommée au scroll.
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // On ne charge qu'une frame sur STEP pour alléger le téléchargement et la
+    // mémoire. Mobile : 3 (~64 frames). Desktop : 1, ou 2 sur machine faible.
+    // drawFrame() retombe sur la frame chargée la plus proche, donc pas de trou
+    // même entre deux frames intermédiaires.
+    const STEP = isMobile ? 3 : lowMemory ? 2 : 1;
 
     // Liste des indices réellement chargés (1-based pour le chemin fichier)
     const indices: number[] = [];
-    for (let i = 1; i <= FRAME_COUNT; i += STEP) indices.push(i);
-    // On garde toujours la toute dernière frame pour une fin nette
-    if (indices[indices.length - 1] !== FRAME_COUNT) indices.push(FRAME_COUNT);
+    if (reducedMotion) {
+      indices.push(1);
+    } else {
+      for (let i = 1; i <= FRAME_COUNT; i += STEP) indices.push(i);
+      // On garde toujours la toute dernière frame pour une fin nette
+      if (indices[indices.length - 1] !== FRAME_COUNT) indices.push(FRAME_COUNT);
+    }
 
     const totalToLoad = indices.length;
     let loaded = 0;
@@ -152,7 +178,8 @@ export function FrameLoader() {
         img.fetchPriority = "high";
       }
       const url = pathFn(i);
-      frameSrc[frameIndex] = url;
+      // En reduced-motion on n'enregistre pas l'URL : la frame reste épinglée.
+      if (!reducedMotion) frameSrc[frameIndex] = url;
       img.src = url;
       frameStore.frames[frameIndex] = img;
     });
